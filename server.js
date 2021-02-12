@@ -30,6 +30,7 @@ http.createServer(function (req, res) {
   switch (req.url) {
 
     case '/':
+      usfm_val = '\\id HAB 45HABGNT92.usfm, Good News Translation, June 2003\n\\c 3\n\\s1 A Prayer of Habakkuk\n\\p\n\\v 1 This is a prayer of the prophet Habakkuk:\n\\b\n\\q1\n\\v 2 O \\nd Lord\\nd*, I have heard of what you have done,\n\\q2 and I am filled with awe.\n\\q1 Now do again in our times\n\\q2 the great deeds you used to do.\n\\q1 Be merciful, even when you are angry.'
       let html_data = eval('`' + html_tmplt + '`');
       res.writeHead(200, { 'Content-Type': 'text/html' })
       res.write(html_data)
