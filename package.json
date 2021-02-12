@@ -1,0 +1,32 @@
+{
+  "name": "usfm-grammar-demo",
+  "version": "1.0.0",
+  "description": "A simple website to demonstrate usfm-grammar tool",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kavitharaju/usfm-grammar-demo.git"
+  },
+  "keywords": [
+    "usfm-grammar",
+    "USFM",
+    "parser",
+    "bridgeconn",
+    "bcs",
+    "usfm-parser"
+  ],
+  "author": "kavitharaju",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kavitharaju/usfm-grammar-demo/issues"
+  },
+  "homepage": "https://github.com/kavitharaju/usfm-grammar-demo#readme",
+  "dependencies": {
+    "formidable": "^1.2.2",
+    "usfm-grammar": "^2.0.0-beta.9"
+  }
+}
