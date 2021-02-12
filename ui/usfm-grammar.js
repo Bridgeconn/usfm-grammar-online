@@ -45,12 +45,14 @@ function pageLoad() {
         document.getElementById("box1_error").style.display = 'none';
     } else {
         document.getElementById("box1_error").style.display = 'block';
+        window.scrollTo(0,document.body.scrollHeight);
     }
 
     if (document.getElementById("box2_error_content").innerHTML == '') {
         document.getElementById("box2_error").style.display = 'none';
     } else {
         document.getElementById("box2_error").style.display = 'block';
+        window.scrollTo(0,document.body.scrollHeight);
     }
 }
 
