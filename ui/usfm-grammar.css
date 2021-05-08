@@ -286,7 +286,7 @@ body {
     }
 
     .box2-content {
-      float: right;
+      /* float: right; */
       height: 645px;
 
     }
@@ -329,7 +329,7 @@ body {
     }
 
     .box2-content {
-      float: right;
+      /* float: right; */
       height: 740px;
 
     }
