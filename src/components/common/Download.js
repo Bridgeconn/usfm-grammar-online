@@ -3,16 +3,25 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { Button } from "@material-ui/core";
 
 export default function Download(props) {
-  let { value, extension } = props;
+  const { value, extension } = props;
   const downloadText = () => {
     const element = document.createElement("a");
     const file = new Blob([value], { type: "text/plain" });
     let bookName = "bible";
-    try {
-      bookName = value.split("\n")[0].split("\\id")[1].trim();
-    } catch {
-      console.log("error parsing bookname in file");
+    if (extension === "usfm") {
+      try {
+        bookName = value.split("\n")[0].split("\\id")[1].trim();
+      } catch {
+        console.log("error parsing bookname in file");
+      }
+    } else if (extension === "json") {
+      try {
+        bookName = JSON.parse(value).book.bookCode;
+      } catch {
+        console.log("error parsing bookname in file");
+      }
     }
+
     element.href = URL.createObjectURL(file);
     element.download = bookName.toLowerCase() + "." + extension;
     document.body.appendChild(element); // Required for this to work in FireFox
@@ -21,7 +30,7 @@ export default function Download(props) {
 
   return (
     <Button
-      style={{ margin: 5 }}
+      style={{ margin: 5, height: 24, boxSizing: "content-box" }}
       variant="contained"
       color="primary"
       onClick={downloadText}

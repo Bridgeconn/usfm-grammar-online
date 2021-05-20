@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 import Download from "./common/Download";
 import Upload from "./common/Upload";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import PropTypes from "prop-types";
-
 import { makeStyles } from "@material-ui/core/styles";
 import { Toolbar } from "@material-ui/core";
+import { GrammarContext } from "./context/GrammarContext";
+import ParseJson from "./common/ParseJson";
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -21,7 +21,7 @@ function TabPanel(props) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
     >
-      {value === index && <Typography>{children}</Typography>}
+      {value === index && children}
     </div>
   );
 }
@@ -41,6 +41,8 @@ const useStyles = makeStyles((theme) => ({
 
 function RightPanel() {
   const classes = useStyles();
+  const { jsonValue, setJsonValue } = useContext(GrammarContext);
+
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -54,22 +56,25 @@ function RightPanel() {
             <Tab label="JSON" />
             <Tab label="CSV" />
             <Tab label="TSV" />
-            <Upload />
-            <Download />
+            <ParseJson />
+
+            <Upload setValue={setJsonValue} type="json" />
+            <Download value={jsonValue} extension="json" />
           </Tabs>
         </Toolbar>
       </AppBar>
-      <TabPanel value={value} index={0}></TabPanel>
+      <TabPanel value={value} index={0}>
+        <TextField
+          fullWidth={true}
+          id="outlined-multiline-static"
+          multiline
+          rows={34}
+          value={jsonValue}
+          variant="outlined"
+        />
+      </TabPanel>
       <TabPanel value={value} index={1}></TabPanel>
       <TabPanel value={value} index={2}></TabPanel>
-      <TextField
-        fullWidth="true"
-        id="outlined-multiline-static"
-        multiline
-        rows={34}
-        defaultValue=""
-        variant="outlined"
-      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import TextField from "@material-ui/core/TextField";
 import Download from "./common/Download";
 import Upload from "./common/Upload";
@@ -7,11 +7,13 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import ParseUsfm from "./common/ParseUsfm";
+import { GrammarContext } from "./context/GrammarContext";
 
 const LeftPanel = (props) => {
-  const [value, setValue] = React.useState("Enter USFM Text");
+  const { usfmValue, setUsfmValue } = useContext(GrammarContext);
   const handleTextChange = (event) => {
-    setValue(event.target.value);
+    setUsfmValue(event.target.value);
   };
   const [mode, setMode] = React.useState("strict");
 
@@ -20,7 +22,7 @@ const LeftPanel = (props) => {
   };
 
   return (
-    <div>
+    <>
       <AppBar position="static" color="default">
         <Toolbar>
           <Typography variant="h6">USFM</Typography>
@@ -34,21 +36,21 @@ const LeftPanel = (props) => {
             <MenuItem value="strict">Strict</MenuItem>
             <MenuItem value="relaxed">Relaxed</MenuItem>
           </Select>
-          <Upload setValue={setValue} />
-          <Download value={value} extension="usfm" />
+          <Upload setValue={setUsfmValue} type="usfm" />
+          <Download value={usfmValue} extension="usfm" />
+          <ParseUsfm />
         </Toolbar>
       </AppBar>
       <TextField
-        fullWidth="true"
+        fullWidth={true}
         id="outlined-multiline-static"
         multiline
         rows={34}
         onChange={handleTextChange}
-        value={value}
-        defaultValue=""
+        value={usfmValue}
         variant="outlined"
       />
-    </div>
+    </>
   );
 };
 

@@ -5,7 +5,6 @@ import PublishIcon from "@material-ui/icons/Publish";
 
 const useStyles = makeStyles((theme) => ({
   fileUploadContainer: {
-    display: "flex",
     "& input[type='file']": {
       display: "none",
     },
@@ -19,7 +18,7 @@ function Upload(props) {
   const { setValue } = props;
   const classes = useStyles();
   const fileInput = useRef();
-
+  const allow = props.type === "usfm" ? ".usfm,.sfm" : ".json";
   const loadText = (e) => {
     var file = e.target.files[0];
     if (!file) {
@@ -38,12 +37,7 @@ function Upload(props) {
 
   return (
     <div className={classes.fileUploadContainer}>
-      <input
-        ref={fileInput}
-        accept=".usfm,.sfm"
-        type="file"
-        onChange={loadText}
-      />
+      <input ref={fileInput} accept={allow} type="file" onChange={loadText} />
       <Button
         variant="contained"
         color="primary"
