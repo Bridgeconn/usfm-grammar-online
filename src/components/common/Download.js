@@ -1,10 +1,26 @@
 import React from "react";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import { Button } from "@material-ui/core";
+import { Button, Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
 export default function Download(props) {
   const { value, extension } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const downloadText = () => {
+    if (value === "") {
+      setOpen(true);
+      return;
+    }
+
     const element = document.createElement("a");
     const file = new Blob([value], { type: "text/plain" });
     let bookName = "bible";
@@ -29,14 +45,20 @@ export default function Download(props) {
   };
 
   return (
-    <Button
-      style={{ margin: 5, height: 24, boxSizing: "content-box" }}
-      variant="contained"
-      color="primary"
-      onClick={downloadText}
-      endIcon={<GetAppIcon />}
-    >
-      Download
-    </Button>
+    <>
+      <Button
+        style={{ margin: 5 }}
+        variant="contained"
+        color="primary"
+        onClick={downloadText}
+      >
+        <GetAppIcon />
+      </Button>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+          No Data Available to Download!
+        </Alert>
+      </Snackbar>
+    </>
   );
 }

@@ -38,13 +38,8 @@ function Upload(props) {
   return (
     <div className={classes.fileUploadContainer}>
       <input ref={fileInput} accept={allow} type="file" onChange={loadText} />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={openFileDialog}
-        endIcon={<PublishIcon />}
-      >
-        Upload
+      <Button variant="contained" color="primary" onClick={openFileDialog}>
+        <PublishIcon />
       </Button>
     </div>
   );

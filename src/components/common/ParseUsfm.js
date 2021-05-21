@@ -22,7 +22,7 @@ function ParseUsfm(props) {
         onClick={parseText}
         endIcon={<KeyboardArrowRightIcon />}
       >
-        To JSON
+        Convert
       </Button>
     </div>
   );

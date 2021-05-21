@@ -3,6 +3,7 @@ import RightPanel from "./components/RightPanel";
 import LeftPanel from "./components/LeftPanel";
 import { Grid } from "@material-ui/core";
 import GrammarContextProvider from "./components/context/GrammarContext";
+import BottomNav from "./components/BottomNav";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <RightPanel />
         </Grid>
       </Grid>
+      <BottomNav />
     </GrammarContextProvider>
   );
 }

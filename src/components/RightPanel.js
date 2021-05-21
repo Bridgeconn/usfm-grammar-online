@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  tab: {
+    minWidth: 72,
+  },
 }));
 
 function RightPanel() {
@@ -52,15 +55,27 @@ function RightPanel() {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Toolbar>
-          <Tabs value={value} onChange={handleChange} aria-label="simple tabs">
-            <Tab label="JSON" />
-            <Tab label="CSV" />
-            <Tab label="TSV" />
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="simple tabs"
+            style={{ width: "100%" }}
+          >
+            <Tab label="JSON" style={{ minWidth: 70 }} />
+            <Tab label="CSV" style={{ minWidth: 70 }} />
+            <Tab label="TSV" style={{ minWidth: 70 }} />
             <ParseJson />
-
-            <Upload setValue={setJsonValue} type="json" />
-            <Download value={jsonValue} extension="json" />
           </Tabs>
+          <Upload
+            setValue={setJsonValue}
+            type="json"
+            // style={{ float: "right" }}
+          />
+          <Download
+            value={jsonValue}
+            extension="json"
+            // style={{ float: "right" }}
+          />
         </Toolbar>
       </AppBar>
       <TabPanel value={value} index={0}>
