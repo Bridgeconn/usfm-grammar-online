@@ -7,8 +7,13 @@ import { GrammarContext } from "../context/GrammarContext";
 const grammar = require("usfm-grammar");
 
 function ParseJson(props) {
-  const { jsonValue, setUsfmValue } = useContext(GrammarContext);
+  const { jsonValue, setUsfmValue, alert, tabValue } =
+    useContext(GrammarContext);
+  const disabled = tabValue === 0 ? false : true;
   const parseText = () => {
+    if (jsonValue === "") {
+      return alert("warning", "No Data to Convert");
+    }
     const myJsonParser = new grammar.JSONParser(jsonValue);
     var usfmOutput = myJsonParser.toUSFM();
     setUsfmValue(usfmOutput);
@@ -22,6 +27,7 @@ function ParseJson(props) {
         color="primary"
         onClick={parseText}
         startIcon={<KeyboardArrowLeftIcon />}
+        disabled={disabled}
       >
         Convert
       </Button>

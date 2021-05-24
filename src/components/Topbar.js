@@ -29,10 +29,10 @@ export default function Topbar() {
       <AppBar position="fixed">
         <Toolbar>
           <Grid container>
-            <Grid item sm="2">
+            <Grid item sm={2}>
               <img src={logo} alt="logo" className={classes.logo} />
             </Grid>
-            <Grid item sm="8" className={classes.title}>
+            <Grid item sm={8} className={classes.title}>
               <Typography variant="h5">USFM Grammar Online</Typography>
             </Grid>
           </Grid>

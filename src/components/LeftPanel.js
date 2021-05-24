@@ -14,11 +14,10 @@ import { GrammarContext } from "./context/GrammarContext";
 import { Box, FormControl, InputLabel } from "@material-ui/core";
 
 const LeftPanel = (props) => {
-  const { usfmValue, setUsfmValue } = useContext(GrammarContext);
+  const { usfmValue, setUsfmValue, mode, setMode } = useContext(GrammarContext);
   const handleTextChange = (event) => {
     setUsfmValue(event.target.value);
   };
-  const [mode, setMode] = React.useState("strict");
 
   const handleChange = (event) => {
     setMode(event.target.value);
@@ -69,6 +68,7 @@ const LeftPanel = (props) => {
         id="outlined-multiline-static"
         multiline
         rows={34}
+        placeholder="Enter/Upload USFM Text"
         onChange={handleTextChange}
         value={usfmValue}
         variant="outlined"

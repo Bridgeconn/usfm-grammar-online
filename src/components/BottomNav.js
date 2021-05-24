@@ -2,7 +2,6 @@ import React from "react";
 import { Button } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -11,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -8,
     bottom: 0,
     position: "fixed",
-    background: "blue",
+    background: "#3f51b5",
     color: "#fff",
     padding: "5px 15px",
     textAlign: "center",

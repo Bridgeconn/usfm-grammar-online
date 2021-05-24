@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import { makeStyles } from "@material-ui/core/";
 import Button from "@material-ui/core/Button";
 import PublishIcon from "@material-ui/icons/Publish";
+import { GrammarContext } from "../context/GrammarContext";
 
 const useStyles = makeStyles((theme) => ({
   fileUploadContainer: {
@@ -9,16 +10,22 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
     "& button": {
+      minWidth: 40,
+      width: 40,
       margin: 5,
     },
   },
 }));
 
 function Upload(props) {
-  const { setValue } = props;
+  const { tabValue } = useContext(GrammarContext);
+  const { setValue, type } = props;
+
+  const disabled = tabValue === 0 || type === "usfm" ? false : true;
+
   const classes = useStyles();
   const fileInput = useRef();
-  const allow = props.type === "usfm" ? ".usfm,.sfm" : ".json";
+  const allow = type === "usfm" ? ".usfm,.sfm" : ".json";
   const loadText = (e) => {
     var file = e.target.files[0];
     if (!file) {
@@ -27,7 +34,6 @@ function Upload(props) {
     let reader = new FileReader();
     reader.onload = function (e) {
       setValue(e.target.result);
-      console.log(setValue);
     };
     reader.readAsText(file);
   };
@@ -38,7 +44,12 @@ function Upload(props) {
   return (
     <div className={classes.fileUploadContainer}>
       <input ref={fileInput} accept={allow} type="file" onChange={loadText} />
-      <Button variant="contained" color="primary" onClick={openFileDialog}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={openFileDialog}
+        disabled={disabled}
+      >
         <PublishIcon />
       </Button>
     </div>
