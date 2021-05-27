@@ -1,6 +1,5 @@
 import { Button } from "@material-ui/core";
 import React, { useContext } from "react";
-// import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import { GrammarContext } from "../context/GrammarContext";
 
@@ -15,8 +14,13 @@ function ParseJson(props) {
       return alert("warning", "No Data to Convert");
     }
     const myJsonParser = new grammar.JSONParser(jsonValue);
-    var usfmOutput = myJsonParser.toUSFM();
-    setUsfmValue(usfmOutput);
+    try {
+      var usfmOutput = myJsonParser.toUSFM();
+      setUsfmValue(usfmOutput);
+    } catch (e) {
+      setUsfmValue(e);
+      alert("error", "Error parsing JSON data");
+    }
   };
 
   return (

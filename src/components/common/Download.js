@@ -29,7 +29,7 @@ export default function Download(props) {
     let bookName = "bible";
     if (extension === "usfm") {
       try {
-        bookName = value.split("\n")[0].split("\\id")[1].trim();
+        bookName = value.split("\n")[0].split("\\id")[1].trim().split(" ")[0];
       } catch {
         alert("warning", "Error parsing bookname in file");
       }
