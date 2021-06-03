@@ -5,9 +5,10 @@ import Alert from "@material-ui/lab/Alert";
 import { GrammarContext } from "../context/GrammarContext";
 
 export default function Download(props) {
-  const { alert } = useContext(GrammarContext);
+  const { csvValue, jsonValue, usfmValue, tsvValue, alert } =
+    useContext(GrammarContext);
 
-  const { value, extension } = props;
+  const { extension } = props;
   const [open, setOpen] = React.useState(false);
 
   const handleClose = (event, reason) => {
@@ -19,6 +20,16 @@ export default function Download(props) {
   };
 
   const downloadText = () => {
+    let value = "";
+    if (extension === "usfm") {
+      value = usfmValue;
+    } else if (extension === "json") {
+      value = jsonValue;
+    } else if (extension === "csv") {
+      value = csvValue;
+    } else if (extension === "tsv") {
+      value = tsvValue;
+    }
     if (value === "") {
       setOpen(true);
       return;

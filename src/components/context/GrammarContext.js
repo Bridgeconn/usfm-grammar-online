@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useCallback, useState, createContext } from "react";
 import PropTypes from "prop-types";
 
 export const GrammarContext = createContext();
@@ -26,10 +26,10 @@ const GrammarContextProvider = (props) => {
   const [severity, setSeverity] = useState(false);
   const [mode, setMode] = useState("strict");
 
-  const alert = (severity, message) => {
+  const alert = useCallback((severity, message) => {
     setMessage(message);
     setSeverity(severity);
-  };
+  }, []);
 
   return (
     <GrammarContext.Provider

@@ -60,7 +60,7 @@ const LeftPanel = (props) => {
             <ParseUsfm />
           </Box>
           <Upload setValue={setUsfmValue} type="usfm" />
-          <Download value={usfmValue} extension="usfm" />
+          <Download extension="usfm" />
         </Toolbar>
       </AppBar>
       <TextField

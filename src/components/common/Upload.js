@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Upload(props) {
-  const { tabValue } = useContext(GrammarContext);
+  const { tabValue, setTabValue } = useContext(GrammarContext);
   const { setValue, type } = props;
 
   const disabled = tabValue === 0 || type === "usfm" ? false : true;
@@ -26,15 +26,18 @@ function Upload(props) {
   const classes = useStyles();
   const fileInput = useRef();
   const allow = type === "usfm" ? ".usfm,.sfm" : ".json";
-  const loadText = (e) => {
-    var file = e.target.files[0];
+  const loadText = (event) => {
+    var file = event.target.files[0];
     if (!file) {
       return;
     }
     let reader = new FileReader();
     reader.onload = function (e) {
+      setTabValue(0);
       setValue(e.target.result);
+      event.target.value = null;
     };
+
     reader.readAsText(file);
   };
   const openFileDialog = () => {

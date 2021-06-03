@@ -11,6 +11,8 @@ import { Toolbar } from "@material-ui/core";
 import { GrammarContext } from "./context/GrammarContext";
 import ParseJson from "./common/ParseJson";
 
+const grammar = require("usfm-grammar");
+
 function TabPanel(props) {
   const { children, value, index } = props;
 
@@ -45,16 +47,29 @@ const useStyles = makeStyles((theme) => ({
 function RightPanel() {
   const classes = useStyles();
   const {
+    usfmValue,
+    mode,
     jsonValue,
     setJsonValue,
     csvValue,
+    setCsvValue,
     tsvValue,
     tabValue,
     setTabValue,
+    setTsvValue,
     alert,
   } = useContext(GrammarContext);
-  const [extension, setExtension] = React.useState("json");
-  const [value, setValue] = React.useState("");
+  // const [extension, setExtension] = React.useState("json");
+
+  const getExtension = () => {
+    if (tabValue === 0) {
+      return "json";
+    } else if (tabValue === 1) {
+      return "csv";
+    } else if (tabValue === 2) {
+      return "tsv";
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -67,17 +82,46 @@ function RightPanel() {
   };
 
   useEffect(() => {
-    if (tabValue === 0) {
-      setExtension("json");
-      setValue(jsonValue);
-    } else if (tabValue === 1) {
-      setExtension("csv");
-      setValue(csvValue);
+    // check for usfmValue in empty cases
+    const checkUSFMValue = () => {
+      if (usfmValue === "") {
+        alert("warning", "No Data to Convert");
+        return "";
+      }
+      return mode === "relaxed"
+        ? new grammar.USFMParser(usfmValue, grammar.LEVEL.RELAXED)
+        : new grammar.USFMParser(usfmValue);
+    };
+    const parseToCSV = async () => {
+      try {
+        const myUSFMParser = checkUSFMValue();
+        if (myUSFMParser === "") {
+          return;
+        }
+        await setCsvValue(myUSFMParser.toCSV());
+      } catch (e) {
+        await setCsvValue(e);
+        alert("error", "Error parsing USFM data");
+      }
+    };
+    const parseToTSV = () => {
+      try {
+        const myUSFMParser = checkUSFMValue();
+        if (myUSFMParser === "") {
+          return;
+        }
+        setTsvValue(myUSFMParser.toTSV());
+      } catch (e) {
+        setTsvValue(e);
+        alert("error", "Error parsing USFM data");
+      }
+    };
+    if (tabValue === 1) {
+      parseToCSV();
     } else if (tabValue === 2) {
-      setExtension("tsv");
-      setValue(tsvValue);
+      parseToTSV();
     }
-  }, [tabValue, jsonValue, csvValue, tsvValue, setExtension]);
+  }, [tabValue, usfmValue, mode, alert, setCsvValue, setTsvValue]);
 
   return (
     <div className={classes.root}>
@@ -95,7 +139,7 @@ function RightPanel() {
             <ParseJson />
           </Tabs>
           <Upload setValue={setJsonValue} type="json" />
-          <Download value={value} extension={extension} />
+          <Download extension={getExtension()} />
         </Toolbar>
       </AppBar>
       <TabPanel value={tabValue} index={0}>
