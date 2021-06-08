@@ -5,6 +5,7 @@ import { Grid } from "@material-ui/core";
 import GrammarContextProvider from "./components/context/GrammarContext";
 import BottomNav from "./components/BottomNav";
 import Alert from "./components/common/Alert";
+import Loading from "./components/common/Loading";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       </Grid>
       <BottomNav />
       <Alert />
+      <Loading />
     </GrammarContextProvider>
   );
 }

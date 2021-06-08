@@ -25,10 +25,13 @@ const GrammarContextProvider = (props) => {
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState(false);
   const [mode, setMode] = useState("strict");
+  const [open, setOpen] = useState(false);
 
   const alert = useCallback((severity, message) => {
-    setMessage(message);
-    setSeverity(severity);
+    if (message !== "" && severity !== "") {
+      setSeverity(severity);
+      setMessage(message);
+    }
   }, []);
 
   return (
@@ -50,6 +53,8 @@ const GrammarContextProvider = (props) => {
         alert: alert,
         mode: mode,
         setMode: setMode,
+        open: open,
+        setOpen: setOpen,
       }}
     >
       {props.children}

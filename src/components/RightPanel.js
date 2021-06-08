@@ -58,8 +58,8 @@ function RightPanel() {
     setTabValue,
     setTsvValue,
     alert,
+    setOpen,
   } = useContext(GrammarContext);
-  // const [extension, setExtension] = React.useState("json");
 
   const getExtension = () => {
     if (tabValue === 0) {
@@ -103,6 +103,7 @@ function RightPanel() {
         await setCsvValue(e);
         alert("error", "Error parsing USFM data");
       }
+      setOpen(false);
     };
     const parseToTSV = () => {
       try {
@@ -115,13 +116,20 @@ function RightPanel() {
         setTsvValue(e);
         alert("error", "Error parsing USFM data");
       }
+      setOpen(false);
     };
     if (tabValue === 1) {
-      parseToCSV();
+      setOpen(true);
+      setTimeout(() => {
+        parseToCSV();
+      }, 500);
     } else if (tabValue === 2) {
-      parseToTSV();
+      setOpen(true);
+      setTimeout(() => {
+        parseToTSV();
+      }, 500);
     }
-  }, [tabValue, usfmValue, mode, alert, setCsvValue, setTsvValue]);
+  }, [tabValue, usfmValue, mode, alert, setCsvValue, setTsvValue, setOpen]);
 
   return (
     <div className={classes.root}>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { Button, Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
@@ -9,7 +9,7 @@ export default function Download(props) {
     useContext(GrammarContext);
 
   const { extension } = props;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
