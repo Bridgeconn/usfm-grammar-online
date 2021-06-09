@@ -25,13 +25,15 @@ export default function Loading() {
       <div className={classes.container}>
         <Box
           fontSize="h5.fontSize"
-          bgcolor="grey"
-          p={2}
+          bgcolor="white"
+          p={1}
+          px={3}
           borderRadius="5px"
           color="grey"
-          className={classes.loading}
+          border={2}
+          borderColor="text.primary"
         >
-          Parsing ...
+          Loading ...
         </Box>
       </div>
     </Modal>

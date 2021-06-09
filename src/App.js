@@ -6,16 +6,35 @@ import GrammarContextProvider from "./components/context/GrammarContext";
 import BottomNav from "./components/BottomNav";
 import Alert from "./components/common/Alert";
 import Loading from "./components/common/Loading";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginTop: 75,
+    marginBottom: 50,
+  },
+  panel1: {
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: 40,
+    },
+  },
+  panel2: {
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: 80,
+    },
+  },
+}));
 
 function App() {
+  const classes = useStyles();
   return (
     <GrammarContextProvider>
       <Topbar />
-      <Grid container style={{ marginTop: 75 }} spacing={2}>
-        <Grid item md={6}>
+      <Grid container className={classes.container} spacing={2}>
+        <Grid item xs={12} sm={12} md={6} className={classes.panel1}>
           <LeftPanel />
         </Grid>
-        <Grid item md={6}>
+        <Grid item xs={12} sm={12} md={6} className={classes.panel2}>
           <RightPanel />
         </Grid>
       </Grid>

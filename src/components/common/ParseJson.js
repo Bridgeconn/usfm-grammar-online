@@ -2,10 +2,26 @@ import { Button } from "@material-ui/core";
 import React, { useContext } from "react";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import { GrammarContext } from "../context/GrammarContext";
+import { makeStyles } from "@material-ui/core/styles";
 
 const grammar = require("usfm-grammar");
 
-function ParseJson(props) {
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: 5,
+    [theme.breakpoints.down("xs")]: {
+      height: 36,
+    },
+  },
+  buttonText: {
+    [theme.breakpoints.down("xs")]: {
+      display: "none",
+    },
+  },
+}));
+
+function ParseJson() {
+  const classes = useStyles();
   const { jsonValue, setUsfmValue, alert, tabValue, setOpen } =
     useContext(GrammarContext);
   const disabled = tabValue === 0 ? false : true;
@@ -33,14 +49,14 @@ function ParseJson(props) {
   return (
     <div>
       <Button
-        style={{ margin: 5 }}
         variant="contained"
         color="primary"
         onClick={parseText}
         startIcon={<KeyboardArrowLeftIcon />}
         disabled={disabled}
+        className={classes.button}
       >
-        Convert
+        <span className={classes.buttonText}>Convert</span>
       </Button>
     </div>
   );

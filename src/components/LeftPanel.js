@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import TextField from "@material-ui/core/TextField";
+import CssTextField from "./common/CssTextField";
 import Download from "./common/Download";
 import Upload from "./common/Upload";
 import Typography from "@material-ui/core/Typography";
@@ -25,7 +25,7 @@ const LeftPanel = (props) => {
 
   return (
     <>
-      <AppBar position="static" color="default" style={{ flexGrow: 1 }}>
+      <AppBar position="static" color="default">
         <Toolbar>
           <Box flexGrow={1} display="flex">
             <Link href="https://github.com/ubsicap/usfm" target="_blank">
@@ -63,15 +63,11 @@ const LeftPanel = (props) => {
           <Download extension="usfm" />
         </Toolbar>
       </AppBar>
-      <TextField
-        fullWidth={true}
-        id="outlined-multiline-static"
-        multiline
-        rows={34}
+      <CssTextField
+        id="usfmText"
         placeholder="Enter/Upload USFM Text"
         onChange={handleTextChange}
         value={usfmValue}
-        variant="outlined"
       />
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import TextField from "@material-ui/core/TextField";
+import CssTextField from "./common/CssTextField";
 import Download from "./common/Download";
 import Upload from "./common/Upload";
 import AppBar from "@material-ui/core/AppBar";
@@ -40,7 +40,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
   tab: {
-    minWidth: 72,
+    minWidth: 70,
+  },
+  tabs: {
+    width: "100%",
   },
 }));
 
@@ -82,35 +85,30 @@ function RightPanel() {
   };
 
   useEffect(() => {
+    if (tabValue === 0) {
+      return;
+    }
     // check for usfmValue in empty cases
     const checkUSFMValue = () => {
       if (usfmValue === "") {
-        alert("warning", "No Data to Convert");
+        alert("warning", "No USFM Data to Convert");
         return "";
       }
       return mode === "relaxed"
         ? new grammar.USFMParser(usfmValue, grammar.LEVEL.RELAXED)
         : new grammar.USFMParser(usfmValue);
     };
-    const parseToCSV = async () => {
+    const parseToCSV = (myUSFMParser) => {
       try {
-        const myUSFMParser = checkUSFMValue();
-        if (myUSFMParser === "") {
-          return;
-        }
-        await setCsvValue(myUSFMParser.toCSV());
+        setCsvValue(myUSFMParser.toCSV());
       } catch (e) {
-        await setCsvValue(e);
+        setCsvValue(e);
         alert("error", "Error parsing USFM data");
       }
       setOpen(false);
     };
-    const parseToTSV = () => {
+    const parseToTSV = (myUSFMParser) => {
       try {
-        const myUSFMParser = checkUSFMValue();
-        if (myUSFMParser === "") {
-          return;
-        }
         setTsvValue(myUSFMParser.toTSV());
       } catch (e) {
         setTsvValue(e);
@@ -118,16 +116,19 @@ function RightPanel() {
       }
       setOpen(false);
     };
-    if (tabValue === 1) {
-      setOpen(true);
-      setTimeout(() => {
-        parseToCSV();
-      }, 500);
-    } else if (tabValue === 2) {
-      setOpen(true);
-      setTimeout(() => {
-        parseToTSV();
-      }, 500);
+    const myUSFMParser = checkUSFMValue();
+    if (myUSFMParser !== "") {
+      if (tabValue === 1) {
+        setOpen(true);
+        setTimeout(() => {
+          parseToCSV(myUSFMParser);
+        }, 500);
+      } else if (tabValue === 2) {
+        setOpen(true);
+        setTimeout(() => {
+          parseToTSV(myUSFMParser);
+        }, 500);
+      }
     }
   }, [tabValue, usfmValue, mode, alert, setCsvValue, setTsvValue, setOpen]);
 
@@ -139,11 +140,11 @@ function RightPanel() {
             value={tabValue}
             onChange={handleChange}
             aria-label="simple tabs"
-            style={{ width: "100%" }}
+            className={classes.tabs}
           >
-            <Tab label="JSON" style={{ minWidth: 70 }} />
-            <Tab label="CSV" style={{ minWidth: 70 }} />
-            <Tab label="TSV" style={{ minWidth: 70 }} />
+            <Tab label="JSON" className={classes.tab} />
+            <Tab label="CSV" className={classes.tab} />
+            <Tab label="TSV" className={classes.tab} />
             <ParseJson />
           </Tabs>
           <Upload setValue={setJsonValue} type="json" />
@@ -151,37 +152,18 @@ function RightPanel() {
         </Toolbar>
       </AppBar>
       <TabPanel value={tabValue} index={0}>
-        <TextField
-          fullWidth={true}
-          id="outlined-multiline-static"
-          multiline
-          rows={34}
+        <CssTextField
+          id="jsonText"
+          placeholder="Enter/Upload JSON Text"
           value={jsonValue}
           onChange={handleTextChange}
-          variant="outlined"
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <TextField
-          fullWidth={true}
-          id="outlined-multiline-static"
-          multiline
-          rows={34}
-          value={csvValue}
-          onChange={displayMessage}
-          variant="outlined"
-        />
+        <CssTextField id="csvText" value={csvValue} onChange={displayMessage} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <TextField
-          fullWidth={true}
-          id="outlined-multiline-static"
-          multiline
-          rows={34}
-          value={tsvValue}
-          onChange={displayMessage}
-          variant="outlined"
-        />
+        <CssTextField id="tsvText" value={tsvValue} onChange={displayMessage} />
       </TabPanel>
     </div>
   );
