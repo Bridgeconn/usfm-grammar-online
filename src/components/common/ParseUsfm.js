@@ -35,14 +35,14 @@ function ParseUsfm() {
     }, 500);
   };
   const usfmParser = () => {
-    const myUsfmParser =
-      mode === "relaxed"
-        ? new grammar.USFMParser(usfmValue, grammar.LEVEL.RELAXED)
-        : new grammar.USFMParser(usfmValue);
     try {
+      const myUsfmParser =
+        mode === "relaxed"
+          ? new grammar.USFMParser(usfmValue, grammar.LEVEL.RELAXED)
+          : new grammar.USFMParser(usfmValue);
       setJsonValue(JSON.stringify(myUsfmParser.toJSON(), undefined, 2));
     } catch (e) {
-      setJsonValue(e);
+      setJsonValue(e.toString());
       alert("error", "Error parsing USFM data");
     }
     setOpen(false);

@@ -36,12 +36,12 @@ function ParseJson() {
     }, 300);
   };
   const jsonParser = () => {
-    const myJsonParser = new grammar.JSONParser(jsonValue);
     try {
+      const myJsonParser = new grammar.JSONParser(jsonValue);
       var usfmOutput = myJsonParser.toUSFM();
       setUsfmValue(usfmOutput);
     } catch (e) {
-      setUsfmValue(e);
+      setUsfmValue(e.toString());
       alert("error", "Error parsing JSON data");
     }
     setOpen(false);
