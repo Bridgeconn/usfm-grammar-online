@@ -6,17 +6,17 @@ export default function CssTextField(props) {
     <TextField
       InputLabelProps={{
         style: {
-          height: "calc(100vh - 245px)",
+          height: "calc(100vh - 195px)",
         },
       }}
       inputProps={{
         style: {
-          height: "calc(100vh - 245px)",
+          height: "calc(100vh - 195px)",
           overflow: "auto",
         },
       }}
       style={{
-        height: "calc(100vh - 245px)",
+        height: "calc(100vh - 195px)",
         width: "100%",
       }}
       multiline

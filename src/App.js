@@ -3,7 +3,6 @@ import RightPanel from "./components/RightPanel";
 import LeftPanel from "./components/LeftPanel";
 import { Grid } from "@material-ui/core";
 import GrammarContextProvider from "./components/context/GrammarContext";
-import BottomNav from "./components/BottomNav";
 import Alert from "./components/common/Alert";
 import Loading from "./components/common/Loading";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,16 +10,18 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: 75,
-    marginBottom: 50,
   },
   panel1: {
     [theme.breakpoints.down("sm")]: {
       marginBottom: 40,
     },
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 55,
+    },
   },
   panel2: {
     [theme.breakpoints.down("sm")]: {
-      marginBottom: 80,
+      marginBottom: 40,
     },
   },
 }));
@@ -38,7 +39,6 @@ function App() {
           <RightPanel />
         </Grid>
       </Grid>
-      <BottomNav />
       <Alert />
       <Loading />
     </GrammarContextProvider>
