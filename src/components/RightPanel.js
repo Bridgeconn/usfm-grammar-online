@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tabs: {
     width: "100%",
+    overflow: "inherit",
   },
 }));
 
