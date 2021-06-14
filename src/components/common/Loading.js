@@ -33,7 +33,7 @@ export default function Loading() {
           border={2}
           borderColor="text.primary"
         >
-          Loading ...
+          Processing ...
         </Box>
       </div>
     </Modal>

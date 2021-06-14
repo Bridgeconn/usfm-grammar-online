@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ParseUsfm() {
   const classes = useStyles();
-  const { usfmValue, setJsonValue, setTabValue, alert, mode, setOpen } =
+  const { usfmValue, setJsonValue, setTabValue, alert, mode, type, setOpen } =
     useContext(GrammarContext);
   const parseText = () => {
     if (usfmValue === "") {
@@ -35,12 +35,13 @@ function ParseUsfm() {
     }, 500);
   };
   const usfmParser = () => {
+    const typeMode = type === "all" ? null : grammar.FILTER.SCRIPTURE;
     try {
       const myUsfmParser =
         mode === "relaxed"
           ? new grammar.USFMParser(usfmValue, grammar.LEVEL.RELAXED)
           : new grammar.USFMParser(usfmValue);
-      setJsonValue(JSON.stringify(myUsfmParser.toJSON(), undefined, 2));
+      setJsonValue(JSON.stringify(myUsfmParser.toJSON(typeMode), undefined, 2));
     } catch (e) {
       setJsonValue(e.toString());
       alert("error", "Error parsing USFM data");

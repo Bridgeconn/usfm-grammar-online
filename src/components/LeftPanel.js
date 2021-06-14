@@ -14,13 +14,18 @@ import { GrammarContext } from "./context/GrammarContext";
 import { Box, FormControl, InputLabel } from "@material-ui/core";
 
 const LeftPanel = (props) => {
-  const { usfmValue, setUsfmValue, mode, setMode } = useContext(GrammarContext);
+  const { usfmValue, setUsfmValue, mode, setMode, type, setType } =
+    useContext(GrammarContext);
   const handleTextChange = (event) => {
     setUsfmValue(event.target.value);
   };
 
   const handleChange = (event) => {
     setMode(event.target.value);
+  };
+
+  const handleContentChange = (event) => {
+    setType(event.target.value);
   };
 
   return (
@@ -40,6 +45,23 @@ const LeftPanel = (props) => {
               </Typography>
             </Link>
 
+            <FormControl variant="outlined" style={{ width: 112 }}>
+              <InputLabel id="demo-simple-select-outlined-label">
+                Type
+              </InputLabel>
+
+              <Select
+                style={{ height: 37 }}
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={type}
+                onChange={handleContentChange}
+                label="Type"
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="scripture">Scripture</MenuItem>
+              </Select>
+            </FormControl>
             <FormControl variant="outlined" style={{ width: 106 }}>
               <InputLabel id="demo-simple-select-outlined-label">
                 Mode
@@ -53,7 +75,7 @@ const LeftPanel = (props) => {
                 onChange={handleChange}
                 label="Mode"
               >
-                <MenuItem value="strict">Strict</MenuItem>
+                <MenuItem value="regular">Regular</MenuItem>
                 <MenuItem value="relaxed">Relaxed</MenuItem>
               </Select>
             </FormControl>
