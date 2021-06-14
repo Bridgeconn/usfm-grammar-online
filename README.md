@@ -1,6 +1,6 @@
 # usfm-grammar-online
 
-Demo application of USFM-Grammar
+Demo application of [USFM-Grammar](https://github.com/Bridgeconn/usfm-grammar)
 
 Made using ReactJS
 
