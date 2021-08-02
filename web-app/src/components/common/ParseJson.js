@@ -1,6 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { useContext } from "react";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
+import Tooltip from '@material-ui/core/Tooltip';
 import { GrammarContext } from "../context/GrammarContext";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -48,16 +49,18 @@ function ParseJson() {
   };
   return (
     <div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={parseText}
-        startIcon={<KeyboardArrowLeftIcon />}
-        disabled={disabled}
-        className={classes.button}
-      >
-        <span className={classes.buttonText}>Convert</span>
-      </Button>
+      <Tooltip title="Convert">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={parseText}
+          startIcon={<KeyboardArrowLeftIcon />}
+          disabled={disabled}
+          className={classes.button}
+        >
+          <span className={classes.buttonText}>Convert</span>
+        </Button>
+      </Tooltip>
     </div>
   );
 }

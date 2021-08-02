@@ -2,6 +2,7 @@ import React, { useRef, useContext } from "react";
 import { makeStyles } from "@material-ui/core/";
 import Button from "@material-ui/core/Button";
 import PublishIcon from "@material-ui/icons/Publish";
+import Tooltip from '@material-ui/core/Tooltip';
 import { GrammarContext } from "../context/GrammarContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,14 +48,16 @@ function Upload(props) {
   return (
     <div className={classes.fileUploadContainer}>
       <input ref={fileInput} accept={allow} type="file" onChange={loadText} />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={openFileDialog}
-        disabled={disabled}
-      >
-        <PublishIcon />
-      </Button>
+      <Tooltip title="Upload file">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={openFileDialog}
+          disabled={disabled}
+        >
+          <PublishIcon />
+        </Button>
+      </Tooltip>
     </div>
   );
 }
