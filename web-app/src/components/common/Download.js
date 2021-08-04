@@ -3,6 +3,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { Button, Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { GrammarContext } from "../context/GrammarContext";
+import Tooltip from '@material-ui/core/Tooltip';
 
 export default function Download(props) {
   const { csvValue, jsonValue, usfmValue, tsvValue, alert } =
@@ -72,14 +73,16 @@ export default function Download(props) {
 
   return (
     <>
-      <Button
-        style={{ margin: 5, minWidth: 40, width: 40 }}
-        variant="contained"
-        color="primary"
-        onClick={downloadText}
-      >
-        <GetAppIcon />
-      </Button>
+      <Tooltip title="Download file">
+        <Button
+          style={{ margin: 5, minWidth: 40, width: 40 }}
+          variant="contained"
+          color="primary"
+          onClick={downloadText}
+        >
+          <GetAppIcon />
+        </Button>
+      </Tooltip>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="warning">
           No Data Available to Download!

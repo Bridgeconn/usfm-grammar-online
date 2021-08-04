@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import logo from "../img/logo.png";
 import GitHubIcon from "@material-ui/icons/GitHub";
-import { Box, Grid, IconButton } from "@material-ui/core";
+import { Box, Grid, IconButton, Tooltip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,17 +55,19 @@ export default function Topbar() {
                 m={1.5}
                 mr={0}
               >
-                <IconButton
-                  variant="outlined"
-                  className={classes.button}
-                  color="inherit"
-                  href="https://github.com/Bridgeconn/usfm-grammar"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <GitHubIcon />
-                </IconButton>
-                <Typography className={classes.version}>v2.0.0</Typography>
+                <Tooltip title="GitHub code repository">
+                  <IconButton
+                    variant="outlined"
+                    className={classes.button}
+                    color="inherit"
+                    href="https://github.com/Bridgeconn/usfm-grammar"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <GitHubIcon />
+                  </IconButton>
+                </Tooltip>
+                <Typography className={classes.version}>v2.2.0</Typography>
               </Box>
             </Grid>
           </Grid>

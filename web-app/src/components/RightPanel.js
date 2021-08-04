@@ -7,7 +7,9 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Toolbar } from "@material-ui/core";
+import { Toolbar, Button } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import { GrammarContext } from "./context/GrammarContext";
 import ParseJson from "./common/ParseJson";
 
@@ -40,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
   tab: {
-    minWidth: 70,
+    minWidth: 65,
   },
   tabs: {
     width: "100%",
@@ -63,6 +65,7 @@ function RightPanel() {
     setTsvValue,
     alert,
     setOpen,
+    setType,
   } = useContext(GrammarContext);
 
   const getExtension = () => {
@@ -148,6 +151,18 @@ function RightPanel() {
             <Tab label="TSV" className={classes.tab} />
             <ParseJson />
           </Tabs>
+          <Tooltip title="Apply filter">
+            <Button
+              style={{ margin: 5, minWidth: 40, width: 40 }}
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setType("scripture");
+              }}
+            >
+              <FilterListIcon />
+            </Button>
+          </Tooltip>
           <Upload setValue={setJsonValue} type="json" />
           <Download extension={getExtension()} />
         </Toolbar>
