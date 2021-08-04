@@ -67,7 +67,7 @@ export default function Topbar() {
                     <GitHubIcon />
                   </IconButton>
                 </Tooltip>
-                <Typography className={classes.version}>v2.0.0</Typography>
+                <Typography className={classes.version}>v2.2.0</Typography>
               </Box>
             </Grid>
           </Grid>
