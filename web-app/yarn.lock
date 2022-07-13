@@ -12356,10 +12356,10 @@ use@^3.1.0:
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
 
-usfm-grammar@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/usfm-grammar/-/usfm-grammar-2.2.0.tgz#6299ba8caf1cf4c1a1f92fa499ba0876d2469e0e"
-  integrity sha512-/+dON7UTeIgRHAhnYfO2DxZr7yoIGUn2OgwG9i9p+wJYme9CUwNjF2OYy+/9DUP4bc0UOvUvMBuTaihaz1dP0w==
+usfm-grammar@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/usfm-grammar/-/usfm-grammar-2.3.0.tgz#05b1cd019f49d8e4de4208b8acb3e13c11422f36"
+  integrity sha512-mmiZWJr5Ez3273SviGOZpdTDLMzhf4gkuW/vzqK4KYZSpAZR9ZgUORiNiLDt/cQZxnfTpKNdVm339BwlbPiICQ==
   dependencies:
     jsonschema "^1.4.0"
     npm "^7.20.1"
