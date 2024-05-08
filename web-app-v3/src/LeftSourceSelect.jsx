@@ -1,25 +1,21 @@
-import PropTypes from "prop-types";
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 const fileFormats = [
   { name: "USFM", unavailable: false },
-  { name: "USJ", unavailable: false },
-  // { name: 'Table' },
-  // { name: 'Syntax Tree' },
+  { name: "USJ", unavailable: true },
   { name: "USX", unavailable: true },
-  // { name: 'Markdown' },
 ];
 
-export default function LeftSourceSelect({ onChange, source }) {
-  const [selected, setSelected] = useState(fileFormats[0]);
+export default function LeftSourceSelect({ onChange }) {
+  const [selected, setSelected] = useState("");
   useEffect(() => {
-    setSelected(source);
-  }, [source]);
+    setSelected(fileFormats[0]);
+  }, []);
 
   return (
-    <div className="ml-10 w-40">
+    <div className=" w-24 md:w-28 xl:w-48">
       <Listbox
         value={selected}
         onChange={(newValue) => {
@@ -43,7 +39,7 @@ export default function LeftSourceSelect({ onChange, source }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+            <Listbox.Options className="absolute mt-1 max-h-60 w-28 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
               {fileFormats.map((fileFormat, ffIdx) => (
                 <Listbox.Option
                   key={ffIdx}
@@ -80,7 +76,3 @@ export default function LeftSourceSelect({ onChange, source }) {
     </div>
   );
 }
-LeftSourceSelect.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  source: PropTypes.object.isRequired,
-};
