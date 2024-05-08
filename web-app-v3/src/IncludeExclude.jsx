@@ -1,35 +1,25 @@
-import { Fragment, useEffect, useState } from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { Fragment, useEffect, useState } from 'react'
+import { Listbox, Transition } from '@headlessui/react'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
-const fileFormats = [
-  { name: "USJ" },
-  { name: "Table" },
-  { name: "Syntax-Tree" },
-  { name: "USX" },
-  { name: "USFM" },
-];
+const filterType = [
+  { name: 'Include_Markers' },
+  { name: 'Exclude_Markers' },
 
-export default function RightSourceTargetSelect({ onChange, source }) {
-  const [selected, setSelected] = useState("");
+]
 
-  const [availableFileFormats, setAvailableFileFormats] = useState(fileFormats);
-  useEffect(() => {
-    let a = fileFormats.filter((format) => format.name !== source?.name);
-    setAvailableFileFormats(a);
-    setSelected(a[0]);
-    onChange(a[0]);
-  }, [source]);
+export default function IncludeExclude({onChange}) {
+  const [selected, setSelected] = useState("")
+  useEffect(()=>{
+    setSelected(filterType[0])
+  },[])
+
 
   return (
-    <div className=" w-36">
-      <Listbox
-        value={selected}
-        onChange={(newValue) => {
-          setSelected(newValue);
-          onChange(newValue);
-        }}
-      >
+    <div className=" w-24 md:w-28 xl:w-48 ml-2">
+      <Listbox value={selected} onChange={(newValue)=>{setSelected(newValue)
+      onChange(newValue)
+      }}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
             <span className="block truncate">{selected.name}</span>
@@ -46,28 +36,28 @@ export default function RightSourceTargetSelect({ onChange, source }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-10">
-              {availableFileFormats.map((fileFormat, ffIdx) => (
+            <Listbox.Options className="absolute mt-1 max-h-60 w-40 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+              {filterType.map((type, ffIdx) => (
                 <Listbox.Option
                   key={ffIdx}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-amber-100 text-amber-900" : "text-gray-900"
+                      active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                     }`
                   }
-                  value={fileFormat}
+                  value={type}
                 >
                   {({ selected }) => (
                     <>
                       <span
                         className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
+                          selected ? 'font-medium' : 'font-normal'
+                        } `}
                       >
-                        {fileFormat.name}
+                        {type.name}
                       </span>
                       {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600 ">
                           <CheckIcon className="h-5 w-5" aria-hidden="true" />
                         </span>
                       ) : null}
@@ -80,5 +70,5 @@ export default function RightSourceTargetSelect({ onChange, source }) {
         </div>
       </Listbox>
     </div>
-  );
+  )
 }
