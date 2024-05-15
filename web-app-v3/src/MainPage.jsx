@@ -160,7 +160,9 @@ export default function MainPage() {
       setErrorMsg("");
       try {
         const response = await axios.put(
-          `https://stagingapi.vachanengine.org/v2/cms/rest/files/${sourceFileFormat.name.toLowerCase()}/to/${tabName.toLowerCase()}${queryString}`,
+          `${
+            import.meta.env.VITE_APP_API
+          }/v2/cms/rest/files/${sourceFileFormat.name.toLowerCase()}/to/${tabName.toLowerCase()}${queryString}`,
           data,
           config
         );
@@ -173,11 +175,9 @@ export default function MainPage() {
         setStatus("success");
       } catch (error) {
         setLoading(false);
-        setErrorMsg(error?.message +
-          " " +
-          "[" +
-          error.response?.data?.details +
-          "]");
+        setErrorMsg(
+          error?.message + " " + "[" + error.response?.data?.details + "]"
+        );
         setStatus("failed");
       }
     }
@@ -230,7 +230,9 @@ export default function MainPage() {
 
     axios
       .put(
-        `https://stagingapi.vachanengine.org/v2/cms/rest/files/${sourceFileFormat.name.toLowerCase()}/to/${targetFileFormat.name.toLowerCase()}${queryString}`,
+        `${
+          import.meta.env.VITE_APP_API
+        }/v2/cms/rest/files/${sourceFileFormat.name.toLowerCase()}/to/${targetFileFormat.name.toLowerCase()}${queryString}`,
         data,
         config
       )
@@ -254,11 +256,9 @@ export default function MainPage() {
       })
       .catch((error) => {
         // Handle error
-        setErrorMsg(error?.message +
-          " " +
-          "[" +
-          error.response?.data?.details +
-          "]");
+        setErrorMsg(
+          error?.message + " " + "[" + error.response?.data?.details + "]"
+        );
         setFileContentOnRight("");
         setStatus("failed");
         setLoading(false);
