@@ -362,8 +362,8 @@ export default function MainPage() {
 						</div>
 					</div>
 				</header>
-				<main className="h-5/6">
-					<div className="relative  md:h-full ">
+				<main className="h-4/5">
+					<div className="md:h-full ">
 						<div className="mt-2 mb-5 md:h-full md:flex justify-around md:mx-1 ">
 							{/* card 1 */}
 
@@ -373,33 +373,31 @@ export default function MainPage() {
 									<h2 className="mx-1 font-bold">Source</h2>
 									<span className="block border-t border-sky-600 border-2 rounded flex-1"></span>
 								</div>
-								<div className="grid-cols-1">
-									<div className="grid md:grid-cols-4 grid-cols-2 gap-2">
-										<LeftSourceSelect
-											onChange={setSourceFileFormat}
-											source={sourceFileFormat}
-										/>{" "}
-										{targetFileFormat?.name?.toLowerCase() === "usj" ||
-										targetFileFormat?.name?.toLowerCase() === "table" ? (
-											<>
-												<IncludeExclude onChange={setType} />
-												<IncludeExcludeFilter onChange={setFilters} />
-											</>
-										) : (
-											<></>
-										)}
-										<FileUploadButton onChange={handleFileUploadOnLeft} />
-									</div>
+								<div className="grid md:grid-cols-4 grid-cols-2 gap-2">
+									<LeftSourceSelect
+										onChange={setSourceFileFormat}
+										source={sourceFileFormat}
+									/>{" "}
+									{targetFileFormat?.name?.toLowerCase() === "usj" ||
+									targetFileFormat?.name?.toLowerCase() === "table" ? (
+										<>
+											<IncludeExclude onChange={setType} />
+											<IncludeExcludeFilter onChange={setFilters} />
+										</>
+									) : (
+										<></>
+									)}
+									<FileUploadButton onChange={handleFileUploadOnLeft} />
 								</div>
 								<textarea
-									className="w-full h-full text-sm border p-2 mt-1"
+									className="text-sm border mt-5 md:block w-full p-1 h-72 md:h-4/5"
 									value={fileContentOnLeft}
 									onChange={handleTextareaChangeOnLeft}
 									defaultValue={defaultValue}
 								/>
 							</div>
 							<div
-								className="tooltip  absolute hidden md:block md:top-20 z-10"
+								className="tooltip  absolute hidden md:block md:top-32 z-20"
 								data-tip="Process Data">
 								<button
 									className="md:inline-flex text-sm justify-center items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
@@ -421,7 +419,7 @@ export default function MainPage() {
 							</div>
 
 							<div
-								className="absolute block md:hidden  top-96 inset-x-10 tooltip  w-10 m-auto"
+								className="absolute block md:hidden top-96 inset-x-10 tooltip  w-10 m-auto"
 								data-tip="Process Data">
 								<button
 									className="md:inline-flex text-sm justify-center  items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
@@ -453,46 +451,38 @@ export default function MainPage() {
 									defaultIndex={0}
 									selectedIndex={selectedIndex}
 									onChange={setSelectedIndex}>
-									<div className="md:h-1/6 flex justify-between items-center">
-										<div className="w-5/6">
-											<div className="hidden md:block">
-												<Tab.List className="flex space-x-1 rounded-xl">
-													{Object.keys(categories).map((tabName) => (
-														<Tab
-															key={tabName}
-															className={({ selected }) =>
-																classNames(
-																	"w-full rounded-full lg:py-2 text-sm font-medium leading-5",
-																	"ring-white/30 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
-																	selected
-																		? "bg-white text-blue-700 shadow"
-																		: "text-blue-100 hover:bg-blue-600/[0.20] hover:text-white bg-sky-600"
-																)
-															}
-															onClick={() => {
-																handleTabChange(tabName);
-																setTargetFileFormat({ name: tabName });
-															}}>
-															{tabName}
-														</Tab>
-													))}
-												</Tab.List>
-											</div>
-											{/*  */}
-
-											<div className="block md:hidden">
-												<RightSourceTargetSelect
-													onChange={setTargetFileFormat}
-													source={sourceFileFormat}
-												/>
-											</div>
-											{/*  */}
+									<div className="grid md:grid-cols-2 grid-cols-2 gap-2">
+										<div className="ml-5 mt-2 hidden md:block">
+											<Tab.List className="flex space-x-1 rounded-xl">
+												{Object.keys(categories).map((tabName) => (
+													<Tab
+														key={tabName}
+														className={({ selected }) =>
+															classNames(
+																"lg:w-full p-1 sm:w-36 rounded-full lg:py-2 text-sm font-medium leading-5",
+																"ring-white/30 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+																selected
+																	? "bg-white text-blue-700 shadow"
+																	: "text-blue-100 hover:bg-blue-600/[0.20] hover:text-white bg-sky-600"
+															)
+														}
+														onClick={() => {
+															handleTabChange(tabName);
+															setTargetFileFormat({ name: tabName });
+														}}>
+														{tabName}
+													</Tab>
+												))}
+											</Tab.List>
 										</div>
-
 										{/*  */}
-
-										{/*  */}
-										<div className="">
+										<div className="block md:hidden">
+											<RightSourceTargetSelect
+												onChange={setTargetFileFormat}
+												source={sourceFileFormat}
+											/>
+										</div>
+										<div className="mt-2">
 											<button
 												className="mr-2 lg:mr-10 border-2 rounded-lg bg-black text-white hover:bg-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1.5 "
 												onClick={handleDownloadOnRight}>
@@ -513,8 +503,16 @@ export default function MainPage() {
 												</svg>
 											</button>
 										</div>
+
+										{/*  */}
 									</div>
-									<div className="hidden md:block border-t w-full p-1 h-3/5 md:h-4/5">
+
+									{/*  */}
+
+									{/*  */}
+
+									{/* </div> */}
+									<div className="hidden md:block w-full p-1 md:h-4/5 mt-3">
 										<Tab.Panels className="w-full h-full ">
 											{Object.entries(categories).map(
 												([tabName, data], idx) => (
@@ -556,14 +554,14 @@ export default function MainPage() {
 																	</CopyToClipboard>
 																</div>
 																<XMLViewer
-																	className=" w-full h-full "
+																	className="w-full h-full "
 																	xml={data}
 																	collapsible
 																/>
 															</div>
 														) : tabName?.toLowerCase() === "usj" &&
 														  Object.keys(data).length !== 0 ? (
-															<div className=" relative w-full  h-full  p-1 bg-gray-200 overflow-y-auto">
+															<div className=" relative w-full h-72 md:h-full  p-1 bg-gray-200 overflow-y-auto">
 																<section className="section">
 																	{copied ? (
 																		<span style={{ color: "green" }}>
@@ -633,7 +631,7 @@ export default function MainPage() {
 								</Tab.Group>
 
 								{/* right panel ends here */}
-								<div className=" border-t w-full  h-5/6 overflow-y-auto p-1 bg-gray-200 md:hidden block p-3">
+								<div className=" border-t w-full  md:h-5/6 overflow-y-auto bg-gray-200 md:hidden block p-3">
 									{loading ? (
 										<div className="h-full w-full flex items-center justify-center">
 											<span className="loading loading-bars loading-md"></span>
@@ -723,7 +721,7 @@ export default function MainPage() {
 												</CopyToClipboard>
 											</div>
 											<textarea
-												className="w-full h-full bg-gray-200 overflow-y-auto"
+												className="w-full md:h-full h-72 bg-gray-200 overflow-y-auto"
 												value={fileContentOnRight}
 												onChange={handleTextareaChangeOnRight}
 												readOnly={true}
