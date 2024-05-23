@@ -419,7 +419,7 @@ export default function MainPage() {
 							</div>
 
 							<div
-								className="absolute block md:hidden top-96 inset-x-10 tooltip  w-10 m-auto"
+								className="absolute block md:hidden top-96 inset-x-10 tooltip  w-16 m-auto"
 								data-tip="Process Data">
 								<button
 									className="md:inline-flex text-sm justify-center  items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
@@ -637,7 +637,7 @@ export default function MainPage() {
 											<span className="loading loading-bars loading-md"></span>
 										</div>
 									) : targetFileFormat?.name?.toLowerCase() === "usx" ? (
-										<div className=" relative w-full  h-full  p-1 bg-gray-200 overflow-y-auto">
+										<div className=" relative h-72 md:h-full  p-1 bg-gray-200 overflow-y-auto">
 											<section className="section">
 												{copied ? (
 													<span style={{ color: "green" }}>Copied.</span>
