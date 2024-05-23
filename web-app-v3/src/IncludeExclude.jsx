@@ -13,7 +13,7 @@ export default function IncludeExclude({ onChange }) {
 	}, []);
 
 	return (
-		<div className="w-36 md:w-48">
+		<div className="w-36 md:w-48 z-10">
 			<Listbox
 				value={selected}
 				onChange={(newValue) => {

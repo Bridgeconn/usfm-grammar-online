@@ -270,7 +270,7 @@ export default function MainPage() {
 
 	return (
 		<>
-			<div className="h-screen w-screen	 overflow-x-hidden">
+			<div className="h-screen w-screen overflow-x-hidden">
 				<header
 					className=" 
           bg-[#f7f1e3] ">
@@ -306,7 +306,7 @@ export default function MainPage() {
 										</svg>
 									</label>
 								</div>
-								<div className="drawer-side z-10">
+								<div className="drawer-side z-50">
 									<label
 										htmlFor="my-drawer"
 										aria-label="close sidebar"
@@ -339,25 +339,24 @@ export default function MainPage() {
 								<div className="hidden md:block">
 									<AboutUs />
 								</div>
-								<p className="text-base md:text-2xl font-bold text-sky-900	text-right mr-2">
+								<p className="md:text-xl font-bold text-sky-900 text-right mr-2">
 									V3.0.0
 								</p>
-								<div className="tooltip " data-tip="Github Code Repository">
-									<a
-										className="text-2xl"
-										href="https://github.com/Bridgeconn/usfm-grammar"
-										target="_blank"
-										rel="noopener noreferrer">
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											width="32"
-											height="32"
-											fill="#1e3799"
-											viewBox="0 0 256 256">
-											<path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"></path>
-										</svg>
-									</a>
-								</div>
+								<a
+									className="text-2xl"
+									href="https://github.com/Bridgeconn/usfm-grammar"
+									target="_blank"
+									rel="noopener noreferrer"
+									title="Github Code Repository">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="32"
+										height="32"
+										fill="#1e3799"
+										viewBox="0 0 256 256">
+										<path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"></path>
+									</svg>
+								</a>
 							</div>
 						</div>
 					</div>
@@ -367,13 +366,13 @@ export default function MainPage() {
 						<div className="mt-2 mb-5 md:h-full md:flex justify-around md:mx-1 ">
 							{/* card 1 */}
 
-							<div className="p-3 border-2 relative min-w-64 border-t-0 border-sky-600 w-11/12 ml-auto mr-auto mt-10 md:mt-0 md:w-3/6 rounded overflow-visible">
+							<div className="p-3 border-2 relative min-w-64 border-t-0 border-sky-600 w-11/12 ml-auto mr-auto md:mt-0 md:w-3/6 rounded overflow-visible">
 								<div className="flex absolute w-full -top-3 left-0 right-0 items-center">
 									<span className="block border-t border-sky-600 border-2 rounded  flex-1"></span>
 									<h2 className="mx-1 font-bold">Source</h2>
 									<span className="block border-t border-sky-600 border-2 rounded flex-1"></span>
 								</div>
-								<div className="grid md:grid-cols-4 grid-cols-2 gap-2">
+								<div className="grid md:grid-cols-4 justify-items-stretch grid-cols-2 gap-2">
 									<LeftSourceSelect
 										onChange={setSourceFileFormat}
 										source={sourceFileFormat}
@@ -387,7 +386,12 @@ export default function MainPage() {
 									) : (
 										<></>
 									)}
-									<FileUploadButton onChange={handleFileUploadOnLeft} />
+									<div className="flex ml-28">
+										<FileUploadButton
+											className="absolute left-10"
+											onChange={handleFileUploadOnLeft}
+										/>
+									</div>
 								</div>
 								<textarea
 									className="text-sm border mt-5 md:block w-full p-1 h-72 md:h-4/5"
@@ -482,7 +486,7 @@ export default function MainPage() {
 												source={sourceFileFormat}
 											/>
 										</div>
-										<div className="mt-2">
+										<div className="mt-2 flex ml-28 md:ml-2">
 											<button
 												className="mr-2 lg:mr-10 border-2 rounded-lg bg-black text-white hover:bg-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1.5 "
 												onClick={handleDownloadOnRight}>
@@ -732,10 +736,10 @@ export default function MainPage() {
 							</div>
 						</div>
 					</div>
+					<div ref={divRef} className="">
+						<Collapse message={errorMsg} status={status} />
+					</div>
 				</main>
-				<div ref={divRef} className="mt-10">
-					<Collapse message={errorMsg} status={status} />
-				</div>
 			</div>
 		</>
 	);

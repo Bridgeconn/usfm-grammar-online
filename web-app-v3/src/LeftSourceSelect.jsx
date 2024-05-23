@@ -17,7 +17,7 @@ export default function LeftSourceSelect({ onChange }) {
 	}, []);
 
 	return (
-		<div className="w-36 ml-2 z-50 z-0">
+		<div className="w-36 ml-2 z-10">
 			<Listbox
 				value={selected}
 				onChange={(newValue) => {

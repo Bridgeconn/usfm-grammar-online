@@ -24,7 +24,7 @@ export default function RightSourceTargetSelect({ onChange, source }) {
 	}, [source]);
 
 	return (
-		<div className="w-36">
+		<div className="ml-2 w-56">
 			<Listbox
 				value={selected}
 				onChange={(newValue) => {

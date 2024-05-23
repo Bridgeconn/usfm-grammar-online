@@ -46,7 +46,7 @@ export default function IncludeExcludeFilter({ onChange }) {
 		: options;
 
 	return (
-		<div className="ml-4 mt-0.5">
+		<div className="ml-2 md:ml-4 mt-0.5 w-64">
 			<Select
 				value={selectedOptions}
 				onChange={handleChange}
