@@ -273,7 +273,8 @@ export default function MainPage() {
 			<div className="h-screen w-screen overflow-x-hidden">
 				<header
 					className=" 
-          bg-[#f7f1e3] ">
+          bg-[#f7f1e3] "
+				>
 					<div className="flex justify-between items-center">
 						<div className="md:flex-1 hidden md:block ml-4">
 							<img
@@ -282,7 +283,7 @@ export default function MainPage() {
 								className="h-16 p-2"
 							/>
 						</div>{" "}
-						<div className="w-32 md:hidden ml-2">
+						<div className="md:hidden ml-2 border-none">
 							<div className="drawer">
 								<input
 									id="my-drawer"
@@ -291,18 +292,23 @@ export default function MainPage() {
 								/>
 								<div className="">
 									{/* Page content here */}
-									<label htmlFor="my-drawer" className="btn btn-glass">
+									<label
+										htmlFor="my-drawer"
+										className="btn btn-glass shadow-transparent bg-[#f7f1e3] "
+									>
 										{" "}
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
 											fill="none"
 											viewBox="0 0 24 24"
-											className="inline-block w-5 h-5 stroke-current">
+											className="inline-block w-5 h-5 stroke-current"
+										>
 											<path
 												strokeLinecap="round"
 												strokeLinejoin="round"
 												strokeWidth="2"
-												d="M4 6h16M4 12h16M4 18h16"></path>
+												d="M4 6h16M4 12h16M4 18h16"
+											></path>
 										</svg>
 									</label>
 								</div>
@@ -310,7 +316,8 @@ export default function MainPage() {
 									<label
 										htmlFor="my-drawer"
 										aria-label="close sidebar"
-										className="drawer-overlay"></label>
+										className="drawer-overlay"
+									></label>
 									<ul className="menu py-6  w-40 min-h-full  bg-base-200 text-base-content ">
 										{/* Sidebar content here */}
 										<li className="mb-5 border-b border-base-300">
@@ -324,6 +331,27 @@ export default function MainPage() {
 										</li>
 										<li className=" border-2 mx-auto">
 											<AboutUs />
+										</li>
+										<li className="absolute bottom-2 left-16">
+											<button
+												title="Close"
+												className="inline-flex items-center px-3 py-1 rounded-full sm:text-sm md:text-lg font-medium bg-blue-400 text-white hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-5"
+											>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+													width="24"
+													height="24"
+													className="main-grid-item-icon"
+													fill="none"
+													stroke="currentColor"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth="2"
+												>
+													<polyline points="15 18 9 12 15 6" />
+												</svg>
+											</button>
 										</li>
 									</ul>
 								</div>
@@ -347,13 +375,15 @@ export default function MainPage() {
 									href="https://github.com/Bridgeconn/usfm-grammar"
 									target="_blank"
 									rel="noopener noreferrer"
-									title="Github Code Repository">
+									title="Github Code Repository"
+								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										width="32"
 										height="32"
 										fill="#1e3799"
-										viewBox="0 0 256 256">
+										viewBox="0 0 256 256"
+									>
 										<path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"></path>
 									</svg>
 								</a>
@@ -386,7 +416,7 @@ export default function MainPage() {
 									) : (
 										<></>
 									)}
-									<div className="flex ml-28">
+									<div className="flex ml-28 md:ml-36">
 										<FileUploadButton
 											className="absolute left-10"
 											onChange={handleFileUploadOnLeft}
@@ -402,10 +432,12 @@ export default function MainPage() {
 							</div>
 							<div
 								className="tooltip  absolute hidden md:block md:top-32 z-20"
-								data-tip="Process Data">
+								data-tip="Process Data"
+							>
 								<button
 									className="md:inline-flex text-sm justify-center items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
-									onClick={() => fetchData()}>
+									onClick={() => fetchData()}
+								>
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
@@ -416,7 +448,8 @@ export default function MainPage() {
 										stroke="currentColor"
 										strokeLinecap="round"
 										strokeLinejoin="round"
-										strokeWidth="2">
+										strokeWidth="2"
+									>
 										<polyline points="9 18 15 12 9 6" />
 									</svg>
 								</button>
@@ -424,11 +457,13 @@ export default function MainPage() {
 
 							<div
 								className="relative block md:hidden tooltip bottom-4 w-16 m-auto"
-								data-tip="Process Data">
+								data-tip="Process Data"
+							>
 								<button
 									className="md:inline-flex text-sm justify-center  items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
 									onClick={handlePutRequest}
-									disabled={fileContentOnLeft.length < 1}>
+									disabled={fileContentOnLeft.length < 1}
+								>
 									<svg
 										data-slot="icon"
 										fill="none"
@@ -436,11 +471,13 @@ export default function MainPage() {
 										stroke="currentColor"
 										viewBox="0 0 24 24"
 										xmlns="http://www.w3.org/2000/svg"
-										aria-hidden="true">
+										aria-hidden="true"
+									>
 										<path
 											strokeLinecap="round"
 											strokeLinejoin="round"
-											d="m19.5 8.25-7.5 7.5-7.5-7.5"></path>
+											d="m19.5 8.25-7.5 7.5-7.5-7.5"
+										></path>
 									</svg>
 								</button>
 							</div>
@@ -454,16 +491,17 @@ export default function MainPage() {
 								<Tab.Group
 									defaultIndex={0}
 									selectedIndex={selectedIndex}
-									onChange={setSelectedIndex}>
-									<div className="grid md:grid-cols-2 grid-cols-2 gap-2">
-										<div className="ml-5 mt-2 hidden md:block">
+									onChange={setSelectedIndex}
+								>
+									<div className="grid md:grid-cols-6 grid-cols-2 gap-2">
+										<div className="ml-5 col-span-5 mt-2 hidden md:block">
 											<Tab.List className="flex space-x-1 rounded-xl">
 												{Object.keys(categories).map((tabName) => (
 													<Tab
 														key={tabName}
 														className={({ selected }) =>
 															classNames(
-																"lg:w-full p-1 sm:w-36 rounded-full lg:py-2 text-sm font-medium leading-5",
+																"w-72 p-1 rounded-full lg:py-2 text-sm font-medium leading-5",
 																"ring-white/30 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
 																selected
 																	? "bg-white text-blue-700 shadow"
@@ -473,7 +511,8 @@ export default function MainPage() {
 														onClick={() => {
 															handleTabChange(tabName);
 															setTargetFileFormat({ name: tabName });
-														}}>
+														}}
+													>
 														{tabName}
 													</Tab>
 												))}
@@ -486,10 +525,11 @@ export default function MainPage() {
 												source={sourceFileFormat}
 											/>
 										</div>
-										<div className="mt-2 flex ml-28 md:ml-2">
+										<div className="mt-2 flex ml-28 md:ml-20">
 											<button
 												className="mr-2 lg:mr-10 border-2 rounded-lg bg-black text-white hover:bg-sky-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1.5 "
-												onClick={handleDownloadOnRight}>
+												onClick={handleDownloadOnRight}
+											>
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
 													viewBox="0 0 24 24"
@@ -500,7 +540,8 @@ export default function MainPage() {
 													stroke="currentColor"
 													strokeLinecap="round"
 													strokeLinejoin="round"
-													strokeWidth="2">
+													strokeWidth="2"
+												>
 													<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
 													<polyline points="7 10 12 15 17 10" />
 													<line x1="12" x2="12" y1="15" y2="3" />
@@ -525,7 +566,8 @@ export default function MainPage() {
 														className={classNames(
 															"rounded-xl bg-white",
 															"ring-white/60 ring-offset-2  ring-offset-blue-400 focus:outline-none focus:ring-2 h-full"
-														)}>
+														)}
+													>
 														{/* Render the data for each tab here */}
 
 														{loading ? (
@@ -545,13 +587,15 @@ export default function MainPage() {
 																	<CopyToClipboard onCopy={onCopy} text={data}>
 																		<button
 																			className="tooltip tooltip-left"
-																			data-tip="Copy To Clipboard">
+																			data-tip="Copy To Clipboard"
+																		>
 																			<svg
 																				xmlns="http://www.w3.org/2000/svg"
 																				width="28"
 																				height="28"
 																				fill="#ffffff"
-																				viewBox="0 0 256 256">
+																				viewBox="0 0 256 256"
+																			>
 																				<path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"></path>
 																			</svg>
 																		</button>
@@ -576,16 +620,19 @@ export default function MainPage() {
 																<div className="absolute top-1 right-4 border-2 border-black bg-sky-500 hover:bg-slate-400 z-20">
 																	<CopyToClipboard
 																		onCopy={onCopy}
-																		text={JSON.stringify(data)}>
+																		text={JSON.stringify(data)}
+																	>
 																		<button
 																			className="tooltip tooltip-left"
-																			data-tip="Copy To Clipboard">
+																			data-tip="Copy To Clipboard"
+																		>
 																			<svg
 																				xmlns="http://www.w3.org/2000/svg"
 																				width="28"
 																				height="28"
 																				fill="#ffffff"
-																				viewBox="0 0 256 256">
+																				viewBox="0 0 256 256"
+																			>
 																				<path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"></path>
 																			</svg>
 																		</button>
@@ -606,13 +653,15 @@ export default function MainPage() {
 																	<CopyToClipboard onCopy={onCopy} text={data}>
 																		<button
 																			className="tooltip tooltip-left"
-																			data-tip="Copy To Clipboard">
+																			data-tip="Copy To Clipboard"
+																		>
 																			<svg
 																				xmlns="http://www.w3.org/2000/svg"
 																				width="28"
 																				height="28"
 																				fill="#ffffff"
-																				viewBox="0 0 256 256">
+																				viewBox="0 0 256 256"
+																			>
 																				<path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"></path>
 																			</svg>
 																		</button>
@@ -650,16 +699,19 @@ export default function MainPage() {
 											<div className="absolute top-1 right-4 border-2 border-black bg-sky-500 hover:bg-slate-400 z-20">
 												<CopyToClipboard
 													onCopy={onCopy}
-													text={fileContentOnRight}>
+													text={fileContentOnRight}
+												>
 													<button
 														className="tooltip tooltip-left"
-														data-tip="Copy To Clipboard">
+														data-tip="Copy To Clipboard"
+													>
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="28"
 															height="28"
 															fill="#ffffff"
-															viewBox="0 0 256 256">
+															viewBox="0 0 256 256"
+														>
 															<path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"></path>
 														</svg>
 													</button>
@@ -682,16 +734,19 @@ export default function MainPage() {
 											<div className="absolute top-1 right-4 border-2 border-black bg-sky-500 hover:bg-slate-400 z-20">
 												<CopyToClipboard
 													onCopy={onCopy}
-													text={fileContentOnRight}>
+													text={fileContentOnRight}
+												>
 													<button
 														className="tooltip tooltip-left"
-														data-tip="Copy To Clipboard">
+														data-tip="Copy To Clipboard"
+													>
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="28"
 															height="28"
 															fill="#ffffff"
-															viewBox="0 0 256 256">
+															viewBox="0 0 256 256"
+														>
 															<path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"></path>
 														</svg>
 													</button>
@@ -709,16 +764,19 @@ export default function MainPage() {
 											<div className="absolute top-1 right-4 border-2 border-black bg-sky-500 hover:bg-slate-400 z-20">
 												<CopyToClipboard
 													onCopy={onCopy}
-													text={fileContentOnRight}>
+													text={fileContentOnRight}
+												>
 													<button
 														className="tooltip tooltip-left"
-														data-tip="Copy To Clipboard">
+														data-tip="Copy To Clipboard"
+													>
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
 															width="28"
 															height="28"
 															fill="#ffffff"
-															viewBox="0 0 256 256">
+															viewBox="0 0 256 256"
+														>
 															<path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"></path>
 														</svg>
 													</button>
