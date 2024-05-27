@@ -31,6 +31,11 @@ export default function MainPage() {
 	const [filters, setFilters] = useState([{ value: "", label: "All" }]);
 	const [type, setType] = useState({ name: "Include_Markers" });
 	const [status, setStatus] = useState("");
+	const drawerRef = useRef();
+	function handleMenuClick() {
+		if (typeof drawerRef.current === "undefined") return;
+		drawerRef.current.click();
+	}
 
 	const onCopy = useCallback(() => {
 		setCopied(true);
@@ -160,6 +165,7 @@ export default function MainPage() {
 		if (data.USFM !== "") {
 			setLoading(true);
 			setErrorMsg("");
+
 			try {
 				const response = await axios.put(
 					`${
@@ -289,8 +295,9 @@ export default function MainPage() {
 									id="my-drawer"
 									type="checkbox"
 									className="drawer-toggle"
+									ref={drawerRef}
 								/>
-								<div className="">
+								<div className="drawer-content">
 									{/* Page content here */}
 									<label
 										htmlFor="my-drawer"
@@ -336,8 +343,9 @@ export default function MainPage() {
 											<button
 												title="Close"
 												className="inline-flex items-center px-3 py-1 rounded-full sm:text-sm md:text-lg font-medium bg-blue-400 text-white hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-5"
+												onClick={handleMenuClick}
 											>
-												<svg
+												{/* <svg
 													xmlns="http://www.w3.org/2000/svg"
 													viewBox="0 0 24 24"
 													width="24"
@@ -350,7 +358,8 @@ export default function MainPage() {
 													strokeWidth="2"
 												>
 													<polyline points="15 18 9 12 15 6" />
-												</svg>
+												</svg>{" "} */}
+												Close
 											</button>
 										</li>
 									</ul>

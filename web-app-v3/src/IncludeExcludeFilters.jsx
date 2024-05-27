@@ -6,7 +6,13 @@ import Select from "react-select";
 const customStyles = {
 	control: (provided, state) => ({
 		...provided,
-		borderRadius: "8px", // Set border radius as desired
+		borderRadius: "6px", // Set border radius as desired
+		width: "256px",
+		maxHeight: "40px",
+	}),
+	valueContainer: (provided) => ({
+		...provided,
+		backgroundColor: "rgb(229 231 235);",
 	}),
 };
 const options = [
@@ -183,14 +189,13 @@ export default function IncludeExcludeFilter({ onChange }) {
 		: options;
 
 	return (
-		<div className="ml-2 md:ml-4 mt-0.5 w-64">
+		<div className="ml-2 md:ml-4 mt-0.5">
 			<Select
 				value={selectedOptions}
 				onChange={handleChange}
 				options={filteredOptions}
 				isMulti
 				styles={customStyles}
-				width={200}
 			/>
 		</div>
 	);
