@@ -13,6 +13,7 @@ import AboutUs from "./AboutUs";
 import { JsonViewer } from "@textea/json-viewer";
 import IncludeExclude from "./IncludeExclude";
 import IncludeExcludeFilter from "./IncludeExcludeFilters";
+import Drawer from "./myDrawer";
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
@@ -31,11 +32,7 @@ export default function MainPage() {
 	const [filters, setFilters] = useState([{ value: "", label: "All" }]);
 	const [type, setType] = useState({ name: "Include_Markers" });
 	const [status, setStatus] = useState("");
-	const drawerRef = useRef();
-	function handleMenuClick() {
-		if (typeof drawerRef.current === "undefined") return;
-		drawerRef.current.click();
-	}
+	const [openLeft, setOpenLeft] = useState(false);
 
 	const onCopy = useCallback(() => {
 		setCopied(true);
@@ -290,81 +287,27 @@ export default function MainPage() {
 							/>
 						</div>{" "}
 						<div className="md:hidden ml-2 border-none">
-							<div className="drawer">
-								<input
-									id="my-drawer"
-									type="checkbox"
-									className="drawer-toggle"
-									ref={drawerRef}
-								/>
-								<div className="drawer-content">
-									{/* Page content here */}
-									<label
-										htmlFor="my-drawer"
-										className="btn btn-glass shadow-transparent bg-[#f7f1e3] "
-									>
-										{" "}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											className="inline-block w-5 h-5 stroke-current"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth="2"
-												d="M4 6h16M4 12h16M4 18h16"
-											></path>
-										</svg>
-									</label>
-								</div>
-								<div className="drawer-side z-50">
-									<label
-										htmlFor="my-drawer"
-										aria-label="close sidebar"
-										className="drawer-overlay"
-									></label>
-									<ul className="menu py-6  w-40 min-h-full  bg-base-200 text-base-content ">
-										{/* Sidebar content here */}
-										<li className="mb-5 border-b border-base-300">
-											{" "}
-											<img
-												alt="logo"
-												src="/images/logo-blue.png"
-												height={100}
-												width={120}
-											/>
-										</li>
-										<li className=" border-2 mx-auto">
-											<AboutUs />
-										</li>
-										<li className="absolute bottom-2 left-16">
-											<button
-												title="Close"
-												className="inline-flex items-center px-3 py-1 rounded-full sm:text-sm md:text-lg font-medium bg-blue-400 text-white hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mr-5"
-												onClick={handleMenuClick}
-											>
-												{/* <svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-													width="24"
-													height="24"
-													className="main-grid-item-icon"
-													fill="none"
-													stroke="currentColor"
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													strokeWidth="2"
-												>
-													<polyline points="15 18 9 12 15 6" />
-												</svg>{" "} */}
-												Close
-											</button>
-										</li>
-									</ul>
-								</div>
-							</div>
+							<label
+								htmlFor="my-drawer"
+								className="btn btn-glass shadow-transparent bg-[#f7f1e3] "
+								onClick={() => setOpenLeft(!openLeft)}
+							>
+								{" "}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									className="inline-block w-5 h-5 stroke-current"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2"
+										d="M4 6h16M4 12h16M4 18h16"
+									></path>
+								</svg>
+							</label>
+							<Drawer open={openLeft} side="left" setOpen={setOpenLeft} />
 						</div>
 						<div className="flex-1">
 							<h1 className="text-lg md:text-3xl font-bold  text-sky-900  text-center">
