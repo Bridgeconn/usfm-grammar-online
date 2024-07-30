@@ -14,6 +14,6 @@ See the api-server folder README for more details on how to deploy the API Servi
 
 This is made using React JS. When deployed this provides a user interface to work with usfm and json files using the functions usfm-grammar provides.
 
-Demo - https://usfm-grammar-revant.netlify.app/
+Demo - https://usfmgrammar.vachanengine.org/
 
 See the web-app folder README for more details on how to deploy the web service.
