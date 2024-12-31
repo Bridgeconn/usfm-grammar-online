@@ -1,19 +1,46 @@
 # usfm-grammar-online
 
-This repository contains 2 ways to deploy [USFM-Grammar](https://github.com/Bridgeconn/usfm-grammar)
+This is a web service made using React JS to provide a user interface for [USFM-Grammar](https://github.com/Bridgeconn/usfm-grammar)
 
-These solutions create wrappers around the usfm-grammar npm package so that they can be used by developers or end users who are working with usfm file format.
+### Demo URL
+-  https://usfmgrammar.vachanengine.org/
 
-1. API Service
+## Prerequisites
 
-The is made using Node JS and exprss. When deployed this provides the usfm-grammar functions as a REST API service.
+- [Node JS](https://nodejs.org/en/) 20 or above.
+- [NPM](https://www.npmjs.com)
 
-See the api-server folder README for more details on how to deploy the API Service.
+Preferably installed via [nvm](https://nodejs.org/en/download)
 
-2. Web Service
+## Get the code
 
-This is made using React JS. When deployed this provides a user interface to work with usfm and json files using the functions usfm-grammar provides.
+Clone the [git repository](https://github.com/Bridgeconn/usfm-grammar-online.git) or download the zip and extract it
 
-Demo - https://usfmgrammar.vachanengine.org/
+```bash
+git clone --branch usfm-grammar-v3-ui https://github.com/Bridgeconn/usfm-grammar-online.git
+```
 
-See the web-app folder README for more details on how to deploy the web service.
+## Local Deployment Steps
+
+1. Open a terminal and go to the web-app folder
+2. Install the dependencies
+
+   `npm install`
+
+3. Start the server
+
+   `npm run dev`
+
+4. Go to http://localhost:5173
+
+## Production Deployment Steps
+
+The production build folder can be created using the following command
+
+```bash
+npm run build
+```
+
+You can use a hosted solution like [Netlify](https://www.netlify.com/) / [Vercel](https://vercel.com/) or deploy it using a web server like [NginX](https://www.nginx.com/) on your own server.
+
+Steps to deploy a react application with NginX - [Link](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-react-application-with-nginx-on-ubuntu-20-04)
