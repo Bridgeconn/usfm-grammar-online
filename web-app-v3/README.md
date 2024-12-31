@@ -1,27 +1,46 @@
-# USFM Grammar v3 Web App
+# usfm-grammar-online
 
-Currently usfm-grammar only has python version which can be accessed via the Vachan Engine v2 server.
+This is a web service made using React JS to provide a user interface for [USFM-Grammar](https://github.com/Bridgeconn/usfm-grammar)
 
-See https://stagingapi.vachanengine.org/v2/cms/rest/docs for more details.
-
-Vachan Engien v2 URL used - [Link](https://stagingapi.vachanengine.org/v2/cms/rest/docs#/File%20Handling/parse_uploaded_usfm_v2_cms_rest_files_usfm_to__output_format__put)
+### Demo URL
+-  https://usfmgrammar.vachanengine.org/
 
 ## Prerequisites
 
-1. Node.JS v16 or later
-2. Internet Access to use Vachan Engine v2 server
+- [Node JS](https://nodejs.org/en/) 20 or above.
+- [NPM](https://www.npmjs.com)
 
-## Steps to install
+Preferably installed via [nvm](https://nodejs.org/en/download)
 
-1. Clone or download source code from GitHub
+## Get the code
 
-   `git clone https://github.com/Bridgeconn/usfm-grammar-online.git`.
+Clone the [git repository](https://github.com/Bridgeconn/usfm-grammar-online.git) or download the zip and extract it
 
-2. Go to the web-app-3 folder in the terminal
-3. Run `npm install` to install the packages
+```bash
+git clone --branch usfm-grammar-v3-ui https://github.com/Bridgeconn/usfm-grammar-online.git
+```
 
-## Steps to run locally
+## Local Deployment Steps
 
-1. Go to the web-app-3 folder in the terminal
-2. Run `npm run dev` to start the app
-3. Open the browser to `http://localhost:5173/` to access the app
+1. Open a terminal and go to the web-app folder
+2. Install the dependencies
+
+   `npm install`
+
+3. Start the server
+
+   `npm run dev`
+
+4. Go to http://localhost:5173
+
+## Production Deployment Steps
+
+The production build folder can be created using the following command
+
+```bash
+npm run build
+```
+
+You can use a hosted solution like [Netlify](https://www.netlify.com/) / [Vercel](https://vercel.com/) or deploy it using a web server like [NginX](https://www.nginx.com/) on your own server.
+
+Steps to deploy a react application with NginX - [Link](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-react-application-with-nginx-on-ubuntu-20-04)
