@@ -17,12 +17,13 @@ Preferably installed via [nvm](https://nodejs.org/en/download)
 Clone the [git repository](https://github.com/Bridgeconn/usfm-grammar-online.git) or download the zip and extract it
 
 ```bash
-git clone --branch usfm-grammar-v3-ui https://github.com/Bridgeconn/usfm-grammar-online.git
+git clone https://github.com/Bridgeconn/usfm-grammar-online.git
 ```
 
 ## Local Deployment Steps
 
-1. Open a terminal and go to the web-app folder
+1. Open a terminal and go to the web-app-V3 folder
+   `cd web-app-v3`
 2. Install the dependencies
 
    `npm install`
