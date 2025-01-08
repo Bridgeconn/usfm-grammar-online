@@ -15,6 +15,10 @@ import IncludeExclude from "./IncludeExclude";
 import IncludeExcludeFilter from "./IncludeExcludeFilters";
 import Drawer from "./myDrawer";
 
+
+
+import {USFMParser, Filter, Validator } from 'usfm-grammar-web';
+
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
@@ -24,7 +28,7 @@ export default function MainPage() {
 		"\\id hab 45HABGNT92.usfm, Good News Translation, June 2003\n\\c 3\n \\s1 A Prayer of Habakkuk\n \\p\n \\v 1 This is a prayer of the prophet Habakkuk:\n \\b\n \\q1\n \\v 2 O \\nd Lord\\nd*, I have heard of what you have done,\n \\q2 and I am filled with awe.\n \\q1 Now do again in our times\n \\q2 the great deeds you used to do.\n \\q1 Be merciful, even when you are angry.";
 	const [fileContentOnLeft, setFileContentOnLeft] = useState(defaultValue);
 	const [fileContentOnRight, setFileContentOnRight] = useState("");
-	const [sourceFileFormat, setSourceFileFormat] = useState({ name: "USFM" });
+	const [sourceFileFormat, setSourceFileFormat] = useState({name :"USFM"});
 	const [targetFileFormat, setTargetFileFormat] = useState({ name: "USJ" });
 	const [loading, setLoading] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
@@ -57,6 +61,22 @@ export default function MainPage() {
 		setErrorMsg("");
 		setCopied(false);
 	}, [sourceFileFormat]);
+
+	
+
+useEffect(() => {
+  const initializeParser = async () => {
+    await USFMParser.init(
+      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
+      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
+    );
+    console.log("USFM Parser initialized");
+  };
+
+  initializeParser();
+}, []);
+
+
 
 	const handleFileUploadOnLeft = (file) => {
 		let fileAvailable = false;
@@ -136,57 +156,88 @@ export default function MainPage() {
 		setFilters([{ value: "", label: "All" }]);
 	}, [sourceFileFormat]);
 
-	const fetchData = async (tabName = "USJ") => {
-		let markerType = type.name.toLowerCase();
-		let markerFilter = filters.map((option) => option.value);
-		const queryParams = markerFilter
-			.map((marker) => `${markerType}=${marker}`)
-			.join("&");
 
-		let queryString = "";
-		if (
-			(markerType === "include_markers" || markerType === "exclude_markers") &&
-			markerFilter[0] !== ""
-		) {
-			queryString = `?${queryParams}`;
-		}
+	
 
-		const data = {
-			// Your data here
-			USFM: fileContentOnLeft.toString(),
-		};
-		const token = import.meta.env.VITE_APP_API_KEY;
-		const config = {
-			headers: { Authorization: `Bearer ${token}` },
-		};
-		if (data.USFM !== "") {
-			setLoading(true);
-			setErrorMsg("");
+	
+const fetchData = async (tabName = "USJ") => {
+  // Preserve markerType and markerFilter processing
+  let markerType = type.name.toLowerCase();
+  let markerFilter = filters.map((option) => option.value);
+  const queryParams = markerFilter
+    .map((marker) => `${markerType}=${marker}`)
+    .join("&");
 
-			try {
-				const response = await axios.put(
-					`${
-						import.meta.env.VITE_APP_API
-					}/v2/cms/rest/files/${sourceFileFormat.name.toLowerCase()}/to/${tabName.toLowerCase()}${queryString}`,
-					data,
-					config
-				);
-				setCategories((prevState) => ({
-					...prevState,
-					[tabName]: response.data,
-				}));
-				setLoading(false);
-				setErrorMsg("Successfully converted");
-				setStatus("success");
-			} catch (error) {
-				setLoading(false);
-				setErrorMsg(
-					error?.message + " " + "[" + error.response?.data?.details + "]"
-				);
-				setStatus("failed");
-			}
-		}
-	};
+  let queryString = "";
+  if (
+    (markerType === "include_markers" || markerType === "exclude_markers") &&
+    markerFilter[0] !== ""
+  ) {
+    queryString = `?${queryParams}`;
+  }
+
+  // Ensure USFM data is present
+  const usfmString = fileContentOnLeft?.toString() || "";
+  if (!usfmString) {
+    setErrorMsg("No USFM data provided.");
+    setStatus("failed");
+    return;
+  }
+
+  setLoading(true);
+  setErrorMsg("");
+
+  try {
+    // Initialize the parser
+    await USFMParser.init(
+      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
+      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
+    );
+
+    // Create parser instance with the USFM string
+    const parser = new USFMParser(usfmString);
+
+    // Convert USFM to the desired format
+    let convertedData;
+    if (tabName.toLowerCase() === "usj") {
+      convertedData = parser.toUSJ(); // Convert to USJ format
+	  //console.log(JSON.stringify(convertedData, null, 2));
+    } else if (tabName.toLowerCase() === "table") {
+      convertedData = parser.toList(); // Convert to table format
+    } else if (tabName.toLowerCase() === "syntax-tree") {
+      convertedData = parser.toSyntaxTree(); // Convert to syntax tree
+    } else if (tabName.toLowerCase() === "usx") {
+      convertedData = parser.toUSX(); // Convert to USX format
+    } else {
+      throw new Error(`Unsupported format: ${tabName}`);
+    }
+
+    // Update the state
+    setCategories((prevState) => ({
+      ...prevState,
+      [tabName]: convertedData,
+    }));
+
+    setFileContentOnRight(
+      tabName.toLowerCase() === "usj"
+        ? JSON.stringify(convertedData, null, 2) // Pretty-print JSON
+        : convertedData
+    );
+
+    setLoading(false);
+    setErrorMsg("Successfully processed USFM data.");
+    setStatus("success");
+  } catch (error) {
+    console.error("Error processing USFM data:", error);
+    setLoading(false);
+    setErrorMsg(error?.message + " " + "[" + error.response?.data?.details + "]");
+    setStatus("failed");
+  }
+};
+
+	  
+
+
 
 	const handleTabChange = (tabName) => {
 		// Update the target file format based on the selected tab
@@ -202,74 +253,79 @@ export default function MainPage() {
 		// handlePutRequest();
 	};
 
-	const handlePutRequest = () => {
-		// Data to be sent in the PUT request
+	
 
+	const handlePutRequest = async () => {
+		// Preserve markerType and markerFilter processing
 		let markerType = type.name.toLowerCase();
 		let markerFilter = filters.map((option) => option.value);
 		const queryParams = markerFilter
-			.map((marker) => `${markerType}=${marker}`)
-			.join("&");
-
+		  .map((marker) => `${markerType}=${marker}`)
+		  .join("&");
+	  
 		let queryString = "";
 		if (
-			(markerType === "include_markers" || markerType === "exclude_markers") &&
-			markerFilter[0] !== ""
+		  (markerType === "include_markers" || markerType === "exclude_markers") &&
+		  markerFilter[0] !== ""
 		) {
-			queryString = `?${queryParams}`;
+		  queryString = `?${queryParams}`;
 		}
-
+	  
 		setLoading(true);
 		setErrorMsg("");
-		let format = targetFileFormat.name.toLowerCase();
-		const data = {
-			// Your data here
-			USFM: fileContentOnLeft.toString(),
-		};
-		const token = import.meta.env.VITE_APP_API_KEY;
-		const config = {
-			headers: { Authorization: `Bearer ${token}` },
-		};
+	  
+		// Ensure USFM data is present
+		const usfmString = fileContentOnLeft?.toString() || "";
+		if (!usfmString) {
+		  setErrorMsg("No USFM data provided.");
+		  setStatus("failed");
+		  setLoading(false);
+		  return;
+		}
+	  
+		try {
+		  // Initialize the parser
+		  await USFMParser.init(
+			"https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
+			"https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
+		  );
+	  
+		  // Create parser instance with the USFM string
+		  const parser = new USFMParser(usfmString);
+	  
+		  // Process data based on target format
+		  const format = targetFileFormat.name.toLowerCase();
+		  let processedData;
+	  
+		  if (format === "usj") {
+			processedData = parser.toUSJ();
+			setFileContentOnRight(JSON.stringify(processedData, null, 2)); // Pretty-print JSON
+		  } else if (format === "table") {
+			processedData = parser.toList();
+			setFileContentOnRight(processedData);
+		  } else if (format === "syntax-tree") {
+			processedData = parser.toSyntaxTree();
+			setFileContentOnRight(processedData);
+		  } else if (format === "usx") {
+			processedData = parser.toUSX();
+			setFileContentOnRight(processedData);
+		  } else {
+			throw new Error(`Unsupported format: ${format}`);
+		  }
+	  
+		  setErrorMsg("Successfully processed USFM data.");
+		  setStatus("success");
+		  setLoading(false);
+		} catch (error) {
+		  console.error("Error processing USFM data:", error);
+		  setErrorMsg(error?.message + " " + "[" + error.response?.data?.details + "]");
+		  setStatus("failed");
+		  setLoading(false);
+		}
+	  };
+	  
+	  
 
-		// Axios PUT request'
-
-		axios
-			.put(
-				`${
-					import.meta.env.VITE_APP_API
-				}/v2/cms/rest/files/${sourceFileFormat.name.toLowerCase()}/to/${targetFileFormat.name.toLowerCase()}${queryString}`,
-				data,
-				config
-			)
-			.then((response) => {
-				// Handle successful response
-				setErrorMsg("Successfully converted");
-				setStatus("success");
-				if (format === "usj") {
-					setFileContentOnRight(JSON.stringify(response.data));
-					setLoading(false);
-				} else if (format === "table") {
-					setFileContentOnRight(response.data);
-					setLoading(false);
-				} else if (format === "usx") {
-					setFileContentOnRight(response.data);
-					setLoading(false);
-				} else if (format === "syntax-tree") {
-					setFileContentOnRight(response.data);
-					setLoading(false);
-				}
-			})
-			.catch((error) => {
-				// Handle error
-				setErrorMsg(
-					error?.message + " " + "[" + error.response?.data?.details + "]"
-				);
-				setFileContentOnRight("");
-				setStatus("failed");
-				setLoading(false);
-				scrollToDiv();
-			});
-	};
 
 	return (
 		<>
@@ -754,3 +810,4 @@ export default function MainPage() {
 		</>
 	);
 }
+//
