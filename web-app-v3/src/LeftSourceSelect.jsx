@@ -6,8 +6,8 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 const fileFormats = [
 	{ name: "USFM", unavailable: false },
-	{ name: "USJ", unavailable: true },
-	{ name: "USX", unavailable: true },
+	{ name: "USJ", unavailable: false },
+	{ name: "USX", unavailable: false },
 ];
 
 export default function LeftSourceSelect({ onChange }) {

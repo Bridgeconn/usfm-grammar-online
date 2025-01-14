@@ -5,7 +5,7 @@ import FileUploadButton from "./FileUploadButton";
 import RightSourceTargetSelect from "./RightSourceTargetSelect";
 import LeftSourceSelect from "./LeftSourceSelect";
 import XMLViewer from "react-xml-viewer";
-import axios from "axios";
+import { DOMParser } from 'xmldom';
 import { Tab } from "@headlessui/react";
 import Collapse from "./Collapse";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -14,7 +14,6 @@ import { JsonViewer } from "@textea/json-viewer";
 import IncludeExclude from "./IncludeExclude";
 import IncludeExcludeFilter from "./IncludeExcludeFilters";
 import Drawer from "./myDrawer";
-
 
 
 import {USFMParser, Filter, Validator } from 'usfm-grammar-web';
@@ -64,17 +63,17 @@ export default function MainPage() {
 
 	
 
-// useEffect(() => {
-//   const initializeParser = async () => {
-//     await USFMParser.init(
-//       "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
-//       "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
-//     );
-//     console.log("USFM Parser initialized");
-//   };
+	useEffect(() => {
+	  const initializeParser = async () => {
+	    await USFMParser.init(
+	      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
+	      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
+	    );
+	    console.log("USFM Parser initialized");
+	  };
 
-//   initializeParser();
-// }, []);
+	  initializeParser();
+	}, []);
 
 
 
@@ -157,23 +156,84 @@ export default function MainPage() {
 	}, [sourceFileFormat]);
 
 
-	
+	const convert = async (input, informat="usfm", outFormat="usj", exclude=[], include=[]) => {
+		let convertedData;
+		try {
+			let parser;
+			if (informat=="usfm") {
+				    parser = new USFMParser(input);
+			} else if(informat=="usj") {
+					const usj = JSON.parse(input);
+					parser = new USFMParser(null, usj);
+			} else if(informat=="usx") {
+					const xmlparser = new DOMParser();
+					const xmlDoc = xmlparser.parseFromString(input, 'text/xml');
+					parser = new USFMParser(null, null, xmlDoc.getElementsByTagName("usx")[0]);
+			} else {
+				throw new Error(`Unsupported format: ${informat}`);
+			}
+
+			if (outFormat === "USJ") {
+	    	if (include.length > 0) {
+	    			// queryParams = ["c"]
+	      		convertedData = parser.toUSJ(null, include); // Convert to USJ format
+	    	} else if (exclude.length > 0) {
+	    		  convertedData = parser.toUSJ(exclude);
+	    	} else {
+	    		  convertedData = parser.toUSJ();
+	    	}
+	    } else if (outFormat === "Table") {
+				if (include.length > 0) {
+	    			// queryParams = ["c"]
+	      		convertedData = parser.toList(null, include); // Convert to USJ format
+	    	} else if (exclude.length > 0) {
+	    		  convertedData = parser.toList(exclude);
+	    	} else {
+	    		  convertedData = parser.toList();
+	    	}
+
+	      convertedData = parser.toList(); // Convert to table format
+	    } else if (outFormat === "Syntax-Tree") {
+	      convertedData = parser.toSyntaxTree(); // Convert to syntax tree
+	    } else if (outFormat === "USX") {
+	      convertedData = parser.toUSX(); // Convert to USX format
+	    } else if (outFormat === "USFM") {
+	      convertedData = parser.usfm; // Convert to USFM format
+	    } else {
+	      throw new Error(`Unsupported format: ${outFormat}`);
+	    }
+
+
+		} catch (error) {
+    console.error("Error processing input data:", error);
+    setLoading(false);
+    setErrorMsg(error?.message + " " + "[" + error.response?.data?.details + "]");
+    setStatus("failed");
+  	}
+		return convertedData;
+	}
 
 	
 const fetchData = async (tabName = "USJ") => {
   // Preserve markerType and markerFilter processing
-  let markerType = type.name.toLowerCase();
+  let input = sourceFileFormat.name.toLowerCase();
+  let filterType = type.name.toLowerCase();
   let markerFilter = filters.map((option) => option.value);
   let queryParams = [];
   markerFilter = markerFilter.filter(item => item !== "");
   markerFilter.map((marker) => {
-  	queryParams = [...queryParams, ...Filter[marker]];
-  });
+  if (Filter[marker]) {
+    queryParams = [...queryParams, ...Filter[marker]];
+  } else {
+    queryParams = [...queryParams, marker.toLowerCase()];
+  }
+});
+
 
   // Ensure USFM data is present
-  const usfmString = fileContentOnLeft?.toString() || "";
-  if (!usfmString) {
-    setErrorMsg("No USFM data provided.");
+  const inputString = fileContentOnLeft?.toString() || "";
+  if (!inputString) {
+    setErrorMsg("No input data provided.");
     setStatus("failed");
     return;
   }
@@ -181,59 +241,26 @@ const fetchData = async (tabName = "USJ") => {
   setLoading(true);
   setErrorMsg("");
 
-  try {
-    // Initialize the parser
-    await USFMParser.init(
-      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
-      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
-    );
+  const include = filterType === "include_markers" ? queryParams : [];
+  const exclude = filterType === "exclude_markers" ? queryParams : [];
+  let convertedData = await convert(inputString, input, tabName, exclude, include);
 
-    // Create parser instance with the USFM string
-    const parser = new USFMParser(usfmString);
+  // Update the state
+  setCategories((prevState) => ({
+    ...prevState,
+    [tabName]: convertedData,
+  }));
 
-    // Convert USFM to the desired format
-    let convertedData;
-    if (tabName.toLowerCase() === "usj") {
-    	if (markerType=="include_markers" && queryParams.length > 0) {
-    			// queryParams = ["c"]
-      		convertedData = parser.toUSJ(null, queryParams); // Convert to USJ format
-    	} else if (markerType=="exclude_markers" && queryParams.length > 0) {
-    		  convertedData = parser.toUSJ(queryParams);
-    	} else {
-    		  convertedData = parser.toUSJ();
-    	}
-	  //console.log(JSON.stringify(convertedData, null, 2));
-    } else if (tabName.toLowerCase() === "table") {
-      convertedData = parser.toList(); // Convert to table format
-    } else if (tabName.toLowerCase() === "syntax-tree") {
-      convertedData = parser.toSyntaxTree(); // Convert to syntax tree
-    } else if (tabName.toLowerCase() === "usx") {
-      convertedData = parser.toUSX(); // Convert to USX format
-    } else {
-      throw new Error(`Unsupported format: ${tabName}`);
-    }
+  setFileContentOnRight(
+    tabName === "USJ"
+      ? JSON.stringify(convertedData, null, 2) // Pretty-print JSON
+      : convertedData
+  );
 
-    // Update the state
-    setCategories((prevState) => ({
-      ...prevState,
-      [tabName]: convertedData,
-    }));
+  setLoading(false);
+  setErrorMsg("Successfully processed USFM data.");
+  setStatus("success");
 
-    setFileContentOnRight(
-      tabName.toLowerCase() === "usj"
-        ? JSON.stringify(convertedData, null, 2) // Pretty-print JSON
-        : convertedData
-    );
-
-    setLoading(false);
-    setErrorMsg("Successfully processed USFM data.");
-    setStatus("success");
-  } catch (error) {
-    console.error("Error processing USFM data:", error);
-    setLoading(false);
-    setErrorMsg(error?.message + " " + "[" + error.response?.data?.details + "]");
-    setStatus("failed");
-  }
 };
 
 
@@ -251,81 +278,7 @@ const fetchData = async (tabName = "USJ") => {
 		// handlePutRequest();
 	};
 
-	
-
-	const handlePutRequest = async () => {
-		// Preserve markerType and markerFilter processing
-		let markerType = type.name.toLowerCase();
-		let markerFilter = filters.map((option) => option.value);
-	  let queryParams = [];
-	  markerFilter = markerFilter.filter(item => item !== "");
-	  markerFilter.map((marker) => {
-	  	queryParams = [...queryParams, ...Filter[marker]];
-	  });
-
-	  
-		setLoading(true);
-		setErrorMsg("");
-	  
-		// Ensure USFM data is present
-		const usfmString = fileContentOnLeft?.toString() || "";
-		if (!usfmString) {
-		  setErrorMsg("No USFM data provided.");
-		  setStatus("failed");
-		  setLoading(false);
-		  return;
-		}
-	  
-		try {
-		  // Initialize the parser
-		  await USFMParser.init(
-			"https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
-			"https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
-		  );
-	  
-		  // Create parser instance with the USFM string
-		  const parser = new USFMParser(usfmString);
-	  
-		  // Process data based on target format
-		  const format = targetFileFormat.name.toLowerCase();
-		  let processedData;
-		  console.log(queryParams);
-	  
-	    // Convert USFM to the desired format
-	    let convertedData;
-	    if (tabName.toLowerCase() === "usj") {
-	    	if (markerType=="include_markers" && queryParams.length > 0) {
-	    			// queryParams = ["c"]
-	      		convertedData = parser.toUSJ(null, queryParams); // Convert to USJ format
-	    	} else if (markerType=="exclude_markers" && queryParams.length > 0) {
-	    		  convertedData = parser.toUSJ(queryParams);
-	    	} else {
-	    		  convertedData = parser.toUSJ();
-	    	}
-		  //console.log(JSON.stringify(convertedData, null, 2));
-	    } else if (tabName.toLowerCase() === "table") {
-	      convertedData = parser.toList(); // Convert to table format
-	    } else if (tabName.toLowerCase() === "syntax-tree") {
-	      convertedData = parser.toSyntaxTree(); // Convert to syntax tree
-	    } else if (tabName.toLowerCase() === "usx") {
-	      convertedData = parser.toUSX(); // Convert to USX format
-	    } else {
-	      throw new Error(`Unsupported format: ${tabName}`);
-	    }
-
-	  
-		  setErrorMsg("Successfully processed USFM data.");
-		  setStatus("success");
-		  setLoading(false);
-		} catch (error) {
-		  console.error("Error processing USFM data:", error);
-		  setErrorMsg(error?.message + " " + "[" + error.response?.data?.details + "]");
-		  setStatus("failed");
-		  setLoading(false);
-		}
-	  };
-	  
-	  
+  
 
 
 	return (
@@ -469,7 +422,7 @@ const fetchData = async (tabName = "USJ") => {
 							>
 								<button
 									className="md:inline-flex text-sm justify-center  items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
-									onClick={handlePutRequest}
+									onClick={fetchData}
 									disabled={fileContentOnLeft.length < 1}
 								>
 									<svg
