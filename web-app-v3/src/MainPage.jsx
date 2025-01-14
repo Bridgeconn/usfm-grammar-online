@@ -133,10 +133,12 @@ export default function MainPage() {
 
 	const formats = {
 		USJ: [],
-		Table: [],
-		"Syntax-Tree": [],
 		USX: [],
+		Table: [],
 		USFM: [],
+		BibleNLP: [],
+		Versification: [],
+		"Syntax-Tree": [],
 	};
 
 	const [selectedIndex, setSelectedIndex] = useState(0);
@@ -199,6 +201,10 @@ export default function MainPage() {
 	      convertedData = parser.toUSX(); // Convert to USX format
 	    } else if (outFormat === "USFM") {
 	      convertedData = parser.usfm; // Convert to USFM format
+	    }  else if (outFormat === "BibleNLP") {
+	      convertedData = parser.toBibleNlpFormat().text.join("\n"); // Convert to USFM format
+	    }  else if (outFormat === "Versification") {
+	      convertedData = parser.toBibleNlpFormat().vref.join("\n"); // Convert to USFM format
 	    } else {
 	      throw new Error(`Unsupported format: ${outFormat}`);
 	    }

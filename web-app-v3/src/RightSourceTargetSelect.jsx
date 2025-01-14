@@ -6,10 +6,12 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
 const fileFormats = [
 	{ name: "USJ" },
-	{ name: "Table" },
-	{ name: "Syntax-Tree" },
 	{ name: "USX" },
+	{ name: "Table" },
 	{ name: "USFM" },
+	{ name: "BibleNLP" },
+	{ name: "Versification" },
+	{ name: "Syntax-Tree" }
 ];
 
 export default function RightSourceTargetSelect({ onChange, source }) {
