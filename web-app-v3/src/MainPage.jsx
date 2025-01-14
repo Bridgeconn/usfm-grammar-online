@@ -157,9 +157,9 @@ export default function MainPage() {
 
 
 	const convert = async (input, informat="usfm", outFormat="usj", exclude=[], include=[]) => {
-		let convertedData;
+		let convertedData="";
+		let parser;
 		try {
-			let parser;
 			if (informat=="usfm") {
 				    parser = new USFMParser(input);
 			} else if(informat=="usj") {
@@ -203,14 +203,15 @@ export default function MainPage() {
 	      throw new Error(`Unsupported format: ${outFormat}`);
 	    }
 
+		return convertedData;
 
 		} catch (error) {
     console.error("Error processing input data:", error);
     setLoading(false);
-    setErrorMsg(error?.message + " " + "[" + error.response?.data?.details + "]");
+    setErrorMsg("Error processing input data:\n"+error);
     setStatus("failed");
+    return;
   	}
-		return convertedData;
 	}
 
 	
@@ -244,6 +245,11 @@ const fetchData = async (tabName = "USJ") => {
   const include = filterType === "include_markers" ? queryParams : [];
   const exclude = filterType === "exclude_markers" ? queryParams : [];
   let convertedData = await convert(inputString, input, tabName, exclude, include);
+  if (convertedData==null) {
+  	setStatus("failed");
+  	return;
+  }
+
 
   // Update the state
   setCategories((prevState) => ({
