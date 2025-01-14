@@ -64,17 +64,17 @@ export default function MainPage() {
 
 	
 
-useEffect(() => {
-  const initializeParser = async () => {
-    await USFMParser.init(
-      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
-      "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
-    );
-    console.log("USFM Parser initialized");
-  };
+// useEffect(() => {
+//   const initializeParser = async () => {
+//     await USFMParser.init(
+//       "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
+//       "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
+//     );
+//     console.log("USFM Parser initialized");
+//   };
 
-  initializeParser();
-}, []);
+//   initializeParser();
+// }, []);
 
 
 
@@ -164,17 +164,11 @@ const fetchData = async (tabName = "USJ") => {
   // Preserve markerType and markerFilter processing
   let markerType = type.name.toLowerCase();
   let markerFilter = filters.map((option) => option.value);
-  const queryParams = markerFilter
-    .map((marker) => `${markerType}=${marker}`)
-    .join("&");
-
-  let queryString = "";
-  if (
-    (markerType === "include_markers" || markerType === "exclude_markers") &&
-    markerFilter[0] !== ""
-  ) {
-    queryString = `?${queryParams}`;
-  }
+  let queryParams = [];
+  markerFilter = markerFilter.filter(item => item !== "");
+  markerFilter.map((marker) => {
+  	queryParams = [...queryParams, ...Filter[marker]];
+  });
 
   // Ensure USFM data is present
   const usfmString = fileContentOnLeft?.toString() || "";
@@ -200,7 +194,14 @@ const fetchData = async (tabName = "USJ") => {
     // Convert USFM to the desired format
     let convertedData;
     if (tabName.toLowerCase() === "usj") {
-      convertedData = parser.toUSJ(); // Convert to USJ format
+    	if (markerType=="include_markers" && queryParams.length > 0) {
+    			// queryParams = ["c"]
+      		convertedData = parser.toUSJ(null, queryParams); // Convert to USJ format
+    	} else if (markerType=="exclude_markers" && queryParams.length > 0) {
+    		  convertedData = parser.toUSJ(queryParams);
+    	} else {
+    		  convertedData = parser.toUSJ();
+    	}
 	  //console.log(JSON.stringify(convertedData, null, 2));
     } else if (tabName.toLowerCase() === "table") {
       convertedData = parser.toList(); // Convert to table format
@@ -235,9 +236,6 @@ const fetchData = async (tabName = "USJ") => {
   }
 };
 
-	  
-
-
 
 	const handleTabChange = (tabName) => {
 		// Update the target file format based on the selected tab
@@ -259,17 +257,12 @@ const fetchData = async (tabName = "USJ") => {
 		// Preserve markerType and markerFilter processing
 		let markerType = type.name.toLowerCase();
 		let markerFilter = filters.map((option) => option.value);
-		const queryParams = markerFilter
-		  .map((marker) => `${markerType}=${marker}`)
-		  .join("&");
-	  
-		let queryString = "";
-		if (
-		  (markerType === "include_markers" || markerType === "exclude_markers") &&
-		  markerFilter[0] !== ""
-		) {
-		  queryString = `?${queryParams}`;
-		}
+	  let queryParams = [];
+	  markerFilter = markerFilter.filter(item => item !== "");
+	  markerFilter.map((marker) => {
+	  	queryParams = [...queryParams, ...Filter[marker]];
+	  });
+
 	  
 		setLoading(true);
 		setErrorMsg("");
@@ -296,22 +289,30 @@ const fetchData = async (tabName = "USJ") => {
 		  // Process data based on target format
 		  const format = targetFileFormat.name.toLowerCase();
 		  let processedData;
+		  console.log(queryParams);
 	  
-		  if (format === "usj") {
-			processedData = parser.toUSJ();
-			setFileContentOnRight(JSON.stringify(processedData, null, 2)); // Pretty-print JSON
-		  } else if (format === "table") {
-			processedData = parser.toList();
-			setFileContentOnRight(processedData);
-		  } else if (format === "syntax-tree") {
-			processedData = parser.toSyntaxTree();
-			setFileContentOnRight(processedData);
-		  } else if (format === "usx") {
-			processedData = parser.toUSX();
-			setFileContentOnRight(processedData);
-		  } else {
-			throw new Error(`Unsupported format: ${format}`);
-		  }
+	    // Convert USFM to the desired format
+	    let convertedData;
+	    if (tabName.toLowerCase() === "usj") {
+	    	if (markerType=="include_markers" && queryParams.length > 0) {
+	    			// queryParams = ["c"]
+	      		convertedData = parser.toUSJ(null, queryParams); // Convert to USJ format
+	    	} else if (markerType=="exclude_markers" && queryParams.length > 0) {
+	    		  convertedData = parser.toUSJ(queryParams);
+	    	} else {
+	    		  convertedData = parser.toUSJ();
+	    	}
+		  //console.log(JSON.stringify(convertedData, null, 2));
+	    } else if (tabName.toLowerCase() === "table") {
+	      convertedData = parser.toList(); // Convert to table format
+	    } else if (tabName.toLowerCase() === "syntax-tree") {
+	      convertedData = parser.toSyntaxTree(); // Convert to syntax tree
+	    } else if (tabName.toLowerCase() === "usx") {
+	      convertedData = parser.toUSX(); // Convert to USX format
+	    } else {
+	      throw new Error(`Unsupported format: ${tabName}`);
+	    }
+
 	  
 		  setErrorMsg("Successfully processed USFM data.");
 		  setStatus("success");
@@ -435,7 +436,6 @@ const fetchData = async (tabName = "USJ") => {
 									className="text-sm border mt-5 md:block w-full p-1 h-72 md:h-4/5"
 									value={fileContentOnLeft}
 									onChange={handleTextareaChangeOnLeft}
-									defaultValue={defaultValue}
 								/>
 							</div>
 							<div
