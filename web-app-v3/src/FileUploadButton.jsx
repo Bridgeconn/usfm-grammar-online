@@ -29,7 +29,7 @@ const FileUploadButton = ({ onChange }) => {
 				type="file"
 				className="hidden"
 				onChange={handleFileChange}
-				accept=".json, .usfm, .xml ,"
+				accept=".json, .usfm, .xml , .sfm"
 			/>
 		</label>
 	);

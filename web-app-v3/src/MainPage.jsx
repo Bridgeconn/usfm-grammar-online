@@ -53,9 +53,9 @@ export default function MainPage() {
 	}, [targetFileFormat]);
 
 	useEffect(() => {
-		if (sourceFileFormat.name !== "USFM") {
-			setFileContentOnLeft("");
-		}
+		// if (sourceFileFormat.name !== "USFM") {
+		// 	setFileContentOnLeft("");
+		// }
 		setFileContentOnRight("");
 		setErrorMsg("");
 		setCopied(false);
@@ -82,13 +82,16 @@ export default function MainPage() {
 		if (!(file instanceof File)) {
 			return;
 		}
-		if (file.name.split(".")[1] === "usfm") {
+		const end = file.name.split(".")[1]
+		if ( end === "usfm" || end === "sfm") {
 			setSourceFileFormat({ name: "USFM" });
 			fileAvailable = true;
-		} else if (file.name.split(".")[1] === "json") {
-			alert("Sorry,currently only USFM file is supported");
-		} else if (file.name.split(".")[1] === "xml") {
-			alert("Sorry,currently only USFM file is supported");
+		} else if (end === "json") {
+			setSourceFileFormat({ name: "USJ" });
+			fileAvailable = true;
+		} else if (end === "xml") {
+			setSourceFileFormat({ name: "USX" });
+			fileAvailable = true;
 		}
 		if (fileAvailable) {
 			const reader = new FileReader();
