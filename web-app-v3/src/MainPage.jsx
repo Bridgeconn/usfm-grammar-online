@@ -115,9 +115,13 @@ export default function MainPage() {
 		} else if (format === "usj") {
 			a.download = `${sourceFileFormat.name}.json`;
 		} else if (format === "table") {
-			a.download = `${sourceFileFormat.name}.tsv`;
+			a.download = `${sourceFileFormat.name}.csv`;
 		} else if (format === "syntax-tree") {
 			a.download = `${sourceFileFormat.name}-syntax-tree.txt`;
+		} else if (format === "biblenlp") {
+			a.download = `${sourceFileFormat.name}-biblenlp.txt`;
+		} else if (format === "versification") {
+			a.download = `${sourceFileFormat.name}-vref.txt`;
 		}
 
 		document.body.appendChild(a);
