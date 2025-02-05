@@ -79,14 +79,15 @@ export default function MainPage() {
       return;
     }
     const end = file.name.split(".")[1];
-    if (end === "usfm" || end === "sfm") {
-      setSourceFileFormat({ name: "USFM" });
-      fileAvailable = true;
-    } else if (end === "json") {
-      setSourceFileFormat({ name: "USJ" });
-      fileAvailable = true;
-    } else if (end === "xml") {
-      setSourceFileFormat({ name: "USX" });
+    const formatMap = {
+      usfm: "USFM",
+      sfm: "USFM",
+      json: "USJ",
+      xml: "USX",
+    };
+    const formatName = formatMap[end];
+    if (formatName) {
+      setSourceFileFormat({ name: formatName, unavailable: false });
       fileAvailable = true;
     }
     if (fileAvailable) {
