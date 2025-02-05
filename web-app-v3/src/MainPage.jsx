@@ -416,7 +416,7 @@ export default function MainPage() {
                   onChange={handleTextareaChangeOnLeft}
                 />
               </div>
-              <div
+              {/* <div
                 className="tooltip  absolute hidden md:block md:top-32 z-20"
                 data-tip="Process Data"
               >
@@ -439,9 +439,9 @@ export default function MainPage() {
                     <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </button>
-              </div>
+              </div> */}
 
-              <div
+              {/* <div
                 className="relative block md:hidden tooltip bottom-4 w-16 m-auto"
                 data-tip="Process Data"
               >
@@ -466,9 +466,9 @@ export default function MainPage() {
                     ></path>
                   </svg>
                 </button>
-              </div>
+              </div> */}
 
-              <div className="p-2 border-2 relative min-w-64 border-t-0 border-sky-600 w-11/12 ml-auto mr-auto md:mt-0 md:w-3/6 rounded overflow-visible">
+              <div className="p-2 mt-4 border-2 relative min-w-64 border-t-0 border-sky-600 w-11/12 ml-auto mr-auto md:mt-0 md:w-3/6 rounded overflow-visible">
                 <div className="flex absolute w-full -top-3 left-0 right-0 items-center">
                   <span className="block border-t border-sky-600 border-2 rounded  flex-1"></span>
                   <h2 className="mx-1 font-bold">Target</h2>
