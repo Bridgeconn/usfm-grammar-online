@@ -398,7 +398,10 @@ export default function MainPage() {
                       <IncludeExcludeFilter onChange={setFilters} />
                     </>
                   ) : (
-                    <></>
+                    <>
+                      <div></div>
+                      <div></div>
+                    </>
                   )}
                   <div className="flex ml-28 md:ml-36">
                     <FileUploadButton
