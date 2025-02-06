@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import AboutUs from "./AboutUs";
+import Help from "./Help";
 
 const openClassNames = {
 	right: "translate-x-0",
@@ -68,6 +69,9 @@ const Drawer = ({ open, setOpen, side = "right" }) => {
 											height={100}
 											width={120}
 										/>
+									</li>
+									<li className="ml-5 mb-5">
+										<Help />
 									</li>
 									<li className="ml-5">
 										<AboutUs />

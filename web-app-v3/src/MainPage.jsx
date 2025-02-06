@@ -17,6 +17,7 @@ import Drawer from "./myDrawer";
 import TableViewer from "./TableViewer";
 
 import { USFMParser, Filter, Validator } from "usfm-grammar-web";
+import Help from "./Help";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -351,6 +352,9 @@ export default function MainPage() {
             </div>
             <div className="flex-1 flex justify-end">
               <div className="flex flex-row mr-5 items-center">
+                <div className="hidden md:block">
+                  <Help />
+                </div>
                 <div className="hidden md:block">
                   <AboutUs />
                 </div>
