@@ -5,7 +5,6 @@ import FileUploadButton from "./FileUploadButton";
 import RightSourceTargetSelect from "./RightSourceTargetSelect";
 import LeftSourceSelect from "./LeftSourceSelect";
 import XMLViewer from "react-xml-viewer";
-import { DOMParser } from "xmldom";
 import { Tab } from "@headlessui/react";
 import Collapse from "./Collapse";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -16,7 +15,7 @@ import IncludeExcludeFilter from "./IncludeExcludeFilters";
 import Drawer from "./myDrawer";
 import TableViewer from "./TableViewer";
 
-import { USFMParser, Filter, Validator } from "usfm-grammar-web";
+import { Filter, Validator } from "usfm-grammar-web";
 import Help from "./Help";
 
 function classNames(...classes) {
@@ -37,6 +36,7 @@ export default function MainPage() {
   const [type, setType] = useState({ name: "Include_Markers" });
   const [status, setStatus] = useState("");
   const [openLeft, setOpenLeft] = useState(false);
+  const [result, setResult] = useState(null);
 
   const onCopy = useCallback(() => {
     setCopied(true);
@@ -61,18 +61,6 @@ export default function MainPage() {
     setErrorMsg("");
     setCopied(false);
   }, [sourceFileFormat]);
-
-  useEffect(() => {
-    const initializeParser = async () => {
-      await USFMParser.init(
-        "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter-usfm.wasm",
-        "https://cdn.jsdelivr.net/npm/usfm-grammar-web@3.0.0/tree-sitter.wasm"
-      );
-      console.log("USFM Parser initialized");
-    };
-
-    initializeParser();
-  }, []);
 
   const handleFileUploadOnLeft = (file) => {
     let fileAvailable = false;
@@ -146,7 +134,9 @@ export default function MainPage() {
     "Syntax-Tree": [],
   };
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  // const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
   useEffect(() => {
     let a = Object.keys(formats).filter(
       (format) => format !== sourceFileFormat?.name
@@ -157,98 +147,12 @@ export default function MainPage() {
     }, {});
 
     setCategories(resultObject);
-    setSelectedIndex(0);
+    // setSelectedIndex(0);
     setType({ name: "Include_Markers" });
     setFilters([{ value: "", label: "All" }]);
   }, [sourceFileFormat]);
 
-  const convert = async (
-    input,
-    informat = "usfm",
-    outFormat = "usj",
-    exclude = [],
-    include = []
-  ) => {
-    let convertedData = "";
-    let parser;
-    try {
-      if (informat == "usfm") {
-        parser = new USFMParser(input);
-      } else if (informat == "usj") {
-        const usj = JSON.parse(input);
-        parser = new USFMParser(null, usj);
-      } else if (informat == "usx") {
-        const xmlparser = new DOMParser();
-        const xmlDoc = xmlparser.parseFromString(input, "text/xml");
-        parser = new USFMParser(
-          null,
-          null,
-          xmlDoc.getElementsByTagName("usx")[0]
-        );
-      } else {
-        throw new Error(`Unsupported format: ${informat}`);
-      }
-
-      if (outFormat === "USJ") {
-        if (include.length > 0) {
-          // queryParams = ["c"]
-          convertedData = parser.toUSJ(null, include); // Convert to USJ format
-        } else if (exclude.length > 0) {
-          convertedData = parser.toUSJ(exclude);
-        } else {
-          convertedData = parser.toUSJ();
-        }
-      } else if (outFormat === "Table") {
-        if (include.length > 0) {
-          // queryParams = ["c"]
-          convertedData = parser.toList(null, include); // Convert to USJ format
-        } else if (exclude.length > 0) {
-          convertedData = parser.toList(exclude);
-        } else {
-          convertedData = parser.toList();
-        }
-
-        convertedData = parser.toList(); // Convert to table format
-      } else if (outFormat === "Syntax-Tree") {
-        convertedData = parser.toSyntaxTree(); // Convert to syntax tree
-      } else if (outFormat === "USX") {
-        convertedData = parser.toUSX(); // Convert to USX format
-      } else if (outFormat === "USFM") {
-        convertedData = parser.usfm; // Convert to USFM format
-      } else if (outFormat === "BibleNLP") {
-        convertedData = parser.toBibleNlpFormat().text.join("\n"); // Convert to USFM format
-      } else if (outFormat === "Versification") {
-        convertedData = parser.toBibleNlpFormat().vref.join("\n"); // Convert to USFM format
-      } else {
-        throw new Error(`Unsupported format: ${outFormat}`);
-      }
-
-      return convertedData;
-    } catch (error) {
-      console.error("Error processing input data:", error);
-      setLoading(false);
-      setErrorMsg("Error processing input data:\n" + error);
-      setStatus("failed");
-      return;
-    }
-  };
-
   const fetchData = async (tabName = "USJ") => {
-    // Preserve markerType and markerFilter processing
-    let input = sourceFileFormat.name.toLowerCase();
-    let filterType = type.name.toLowerCase();
-    let markerFilter = filters.map((option) => option.value);
-    let queryParams = [];
-    markerFilter = markerFilter.filter((item) => item !== "");
-    markerFilter.map((marker) => {
-      if (Filter[marker]) {
-        queryParams = [...queryParams, ...Filter[marker]];
-      } else {
-        queryParams = [...queryParams, marker.toLowerCase()];
-      }
-    });
-
-    // Ensure USFM data is present
     const inputString = fileContentOnLeft?.toString() || "";
     if (!inputString) {
       setErrorMsg("No input data provided.");
@@ -256,44 +160,98 @@ export default function MainPage() {
       return;
     }
 
-    setLoading(true);
-    setErrorMsg("");
+    try {
+      setLoading(true);
+      setErrorMsg("");
+      setFileContentOnRight("");
 
-    const include = filterType === "include_markers" ? queryParams : [];
-    const exclude = filterType === "exclude_markers" ? queryParams : [];
-    let convertedData = await convert(
-      inputString,
-      input,
-      tabName,
-      exclude,
-      include
-    );
-    if (convertedData == null) {
+      // Get input format and filters
+      const input = sourceFileFormat.name.toLowerCase();
+      const filterType = type.name.toLowerCase();
+      const markerFilter = filters
+        .map((option) => option.value)
+        .filter((item) => item !== "");
+
+      // Process markers
+      const queryParams = markerFilter.reduce((acc, marker) => {
+        return [...acc, ...(Filter[marker] || [marker.toLowerCase()])];
+      }, []);
+
+      // Determine include/exclude parameters
+      const include = filterType === "include_markers" ? queryParams : [];
+      const exclude = filterType === "exclude_markers" ? queryParams : [];
+
+      // Create worker with module type
+      const worker = new Worker(new URL("./usfmWorker.js", import.meta.url), {
+        type: "module",
+      });
+
+      //handle worker messages
+      const result = await new Promise((resolve, reject) => {
+        let initialized = false;
+
+        worker.onmessage = (e) => {
+          if (e.data.type === "initialized") {
+            initialized = true;
+            worker.postMessage({
+              input: inputString,
+              informat: input,
+              outFormat: tabName,
+              exclude,
+              include,
+            });
+          } else if (e.data.type === "success") {
+            resolve(e.data.data);
+          } else if (e.data.type === "error") {
+            reject(new Error(e.data.error));
+          }
+        };
+
+        worker.onerror = (error) => {
+          reject(error);
+        };
+
+        // Set initialization timeout
+        setTimeout(() => {
+          if (!initialized) {
+            reject(new Error("Worker initialization timeout"));
+          }
+        }, 2000);
+      });
+
+      // Cleanup worker
+      worker.terminate();
+
+      setResult(result);
+
+      setErrorMsg("Successfully processed USFM data.");
+      setStatus("success");
+    } catch (error) {
+      setErrorMsg(`Error processing data: ${error.message}`);
       setStatus("failed");
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    // Update the state
-    setCategories((prevState) => ({
-      ...prevState,
-      [tabName]: convertedData,
-    }));
-
-    setFileContentOnRight(
-      tabName === "USJ"
-        ? JSON.stringify(convertedData, null, 2) // Pretty-print JSON
-        : convertedData
-    );
-
-    setLoading(false);
-    setErrorMsg("Successfully processed USFM data.");
-    setStatus("success");
   };
+
+  useEffect(() => {
+    if (result && targetFileFormat) {
+      const tabName = targetFileFormat.name;
+      setCategories((prev) => ({
+        ...prev,
+        [tabName]: result,
+      }));
+      setFileContentOnRight(
+        tabName === "USJ" ? JSON.stringify(result, null, 2) : result
+      );
+      
+      setResult(null);
+    }
+  }, [result, targetFileFormat.name]);
 
   const handleTabChange = (tabName) => {
     // Update the target file format based on the selected tab
-
-    setTargetFileFormat(tabName);
+    setTargetFileFormat({ name: tabName });
     // Fetch data for the selected tab
     setLoading(true);
     fetchData(tabName);
@@ -420,57 +378,6 @@ export default function MainPage() {
                   onChange={handleTextareaChangeOnLeft}
                 />
               </div>
-              {/* <div
-                className="tooltip  absolute hidden md:block md:top-32 z-20"
-                data-tip="Process Data"
-              >
-                <button
-                  className="md:inline-flex text-sm justify-center items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
-                  onClick={() => fetchData()}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="24"
-                    height="24"
-                    className="main-grid-item-icon"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                  >
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-              </div> */}
-
-              {/* <div
-                className="relative block md:hidden tooltip bottom-4 w-16 m-auto"
-                data-tip="Process Data"
-              >
-                <button
-                  className="md:inline-flex text-sm justify-center  items-center  border-2 border-amber-200 hover:border-sky-800 rounded-full bg-white text-sky-600 hover:text-sky-800  focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 w-10 h-10 p-1 "
-                  onClick={fetchData}
-                  disabled={fileContentOnLeft.length < 1}
-                >
-                  <svg
-                    data-slot="icon"
-                    fill="none"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                    ></path>
-                  </svg>
-                </button>
-              </div> */}
 
               <div className="p-2 mt-4 border-2 relative min-w-64 border-t-0 border-sky-600 w-11/12 ml-auto mr-auto md:mt-0 md:w-3/6 rounded overflow-visible">
                 <div className="flex absolute w-full -top-3 left-0 right-0 items-center">
@@ -479,26 +386,29 @@ export default function MainPage() {
                   <span className="block border-t border-sky-600 border-2 rounded flex-1"></span>
                 </div>
                 <Tab.Group
-                  defaultIndex={0}
+                  // defaultIndex={0}
                   selectedIndex={selectedIndex}
                   onChange={setSelectedIndex}
                 >
                   <div className="grid md:grid-cols-6 grid-cols-2 gap-2">
                     <div className="ml-5 col-span-5 mt-2 hidden md:block">
                       <Tab.List className="flex space-x-1 rounded-xl">
-                        {Object.keys(categories).map((tabName) => (
+                        {Object.keys(categories).map((tabName, index) => (
                           <Tab
                             key={tabName}
                             className={({ selected }) =>
                               classNames(
                                 "w-72 p-1 rounded-full lg:py-2 text-sm font-medium leading-5",
                                 "ring-white/30 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
-                                selected
-                                  ? "bg-white text-blue-700 shadow"
-                                  : "text-blue-100 hover:bg-blue-600/[0.20] hover:text-white bg-sky-600"
+                                selectedIndex === null 
+                                ? "text-blue-100 bg-sky-600 hover:bg-blue-600/[0.20] hover:text-white"
+                                : selected
+                                ? "bg-white text-blue-700 shadow"
+                                : "text-blue-100 hover:bg-blue-600/[0.20] hover:text-white bg-sky-600"
                               )
                             }
                             onClick={() => {
+                              setSelectedIndex(index);
                               handleTabChange(tabName);
                               setTargetFileFormat({ name: tabName });
                             }}
@@ -513,6 +423,7 @@ export default function MainPage() {
                       <RightSourceTargetSelect
                         onChange={setTargetFileFormat}
                         source={sourceFileFormat}
+                        onTabChange={handleTabChange}
                       />
                     </div>
                     <div className="mt-2 flex ml-28 md:ml-20">
@@ -707,7 +618,7 @@ export default function MainPage() {
                 </Tab.Group>
 
                 {/* right panel ends here */}
-                <div className=" border-t w-full  md:h-5/6 overflow-y-auto bg-gray-200 md:hidden block p-3">
+                <div className=" border-t w-full  md:h-5/6 overflow-y-auto bg-gray-200 md:hidden block p-3 mt-2">
                   {loading ? (
                     <div className="h-full w-full flex items-center justify-center">
                       <span className="loading loading-bars loading-md"></span>
