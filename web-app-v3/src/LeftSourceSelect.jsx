@@ -3,74 +3,91 @@
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import PropTypes from "prop-types";
 
 const fileFormats = [
-	{ name: "USFM", unavailable: false },
-	{ name: "USJ", unavailable: false },
-	{ name: "USX", unavailable: false },
+  { name: "USFM", unavailable: false },
+  { name: "USJ", unavailable: false },
+  { name: "USX", unavailable: false },
 ];
 
-export default function LeftSourceSelect({ onChange }) {
-	const [selected, setSelected] = useState("");
-	useEffect(() => {
-		setSelected(fileFormats[0]);
-	}, []);
+export default function LeftSourceSelect({ onChange, source }) {
+  const [selected, setSelected] = useState(source || fileFormats[0]);
+  useEffect(() => {
+    if (source && source.name !== selected.name) {
+      const formatOption = fileFormats.find(
+        (format) => format.name === source.name
+      );
+      if (formatOption) {
+        setSelected(formatOption);
+      }
+    }
+  }, [source, selected.name]);
 
-	return (
-		<div className="w-36 ml-2 z-10">
-			<Listbox
-				value={selected}
-				onChange={(newValue) => {
-					setSelected(newValue);
-					onChange(newValue);
-				}}>
-				<div className="relative mt-1">
-					<Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-						<span className="block truncate">{selected.name}</span>
-						<span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-							<ChevronUpDownIcon
-								className="h-5 w-5 text-gray-400"
-								aria-hidden="true"
-							/>
-						</span>
-					</Listbox.Button>
-					<Transition
-						as={Fragment}
-						leave="transition ease-in duration-100"
-						leaveFrom="opacity-100"
-						leaveTo="opacity-0">
-						<Listbox.Options className="absolute mt-1 max-h-60 w-28 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-							{fileFormats.map((fileFormat, ffIdx) => (
-								<Listbox.Option
-									key={ffIdx}
-									className={({ active }) =>
-										`relative cursor-default select-none py-2 pl-10 pr-4 ${
-											active ? "bg-amber-100 text-amber-900" : "text-gray-900"
-										}`
-									}
-									value={fileFormat}
-									disabled={fileFormat.unavailable}>
-									{({ selected }) => (
-										<>
-											<span
-												className={`block truncate ${
-													selected ? "font-medium" : "font-normal"
-												} ${fileFormat.unavailable ? `text-gray-500` : ""}`}>
-												{fileFormat.name}
-											</span>
-											{selected ? (
-												<span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600 ">
-													<CheckIcon className="h-5 w-5" aria-hidden="true" />
-												</span>
-											) : null}
-										</>
-									)}
-								</Listbox.Option>
-							))}
-						</Listbox.Options>
-					</Transition>
-				</div>
-			</Listbox>
-		</div>
-	);
+  LeftSourceSelect.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    source: PropTypes.object,
+  };
+
+  return (
+    <div className="w-36 ml-2 z-10">
+      <Listbox
+        value={selected}
+        onChange={(newValue) => {
+          setSelected(newValue);
+          onChange(newValue);
+        }}
+      >
+        <div className="relative mt-1">
+          <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+            <span className="block truncate">{selected.name}</span>
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+              <ChevronUpDownIcon
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          </Listbox.Button>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="absolute mt-1 max-h-60 w-28 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+              {fileFormats.map((fileFormat, ffIdx) => (
+                <Listbox.Option
+                  key={ffIdx}
+                  className={({ active }) =>
+                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      active ? "bg-amber-100 text-amber-900" : "text-gray-900"
+                    }`
+                  }
+                  value={fileFormat}
+                  disabled={fileFormat.unavailable}
+                >
+                  {({ selected }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        } ${fileFormat.unavailable ? `text-gray-500` : ""}`}
+                      >
+                        {fileFormat.name}
+                      </span>
+                      {selected ? (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600 ">
+                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Transition>
+        </div>
+      </Listbox>
+    </div>
+  );
 }

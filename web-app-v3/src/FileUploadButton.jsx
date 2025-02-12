@@ -6,6 +6,7 @@ const FileUploadButton = ({ onChange }) => {
 	const handleFileChange = (e) => {
 		const file = e.target.files[0];
 		onChange(file);
+		e.target.value = '';
 	};
 
 	return (
