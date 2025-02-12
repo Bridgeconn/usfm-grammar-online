@@ -1,4 +1,4 @@
-import { USFMParser } from "usfm-grammar-web";
+import { USFMParser, Filter } from "usfm-grammar-web";
 import { DOMParser, XMLSerializer } from "xmldom";
 
 const parser = new DOMParser();
@@ -60,7 +60,8 @@ async function convert(
       }
     } else if (outFormat === "Table") {
       if (include.length > 0) {
-        convertedData = usfmParser.toList(null, include, true);
+        const tableInclude = [...new Set([...include, ...Filter.BCV, ...Filter.TEXT])];
+        convertedData = usfmParser.toList(null, tableInclude, true);
       } else if (exclude.length > 0) {
         convertedData = usfmParser.toList(exclude, null, true);
       } else {

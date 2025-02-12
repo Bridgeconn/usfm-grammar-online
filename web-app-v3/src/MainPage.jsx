@@ -256,8 +256,8 @@ export default function MainPage() {
     setLoading(true);
     fetchData(tabName);
     setCopied(false);
-    setType({ name: "Include_Markers" });
-    setFilters([{ value: "", label: "All" }]);
+    // setType({ name: "Include_Markers" });
+    // setFilters([{ value: "", label: "All" }]);
 
     // handlePutRequest();
   };
