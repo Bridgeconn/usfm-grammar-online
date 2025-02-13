@@ -13,6 +13,10 @@ const customStyles = {
 	valueContainer: (provided) => ({
 		...provided,
 		backgroundColor: "rgb(229 231 235);",
+		textOverflow: "ellipsis",
+		overflow: "hidden",
+		whiteSpace: "nowrap",
+		flexWrap: "nowrap"
 	}),
 };
 const options = [
@@ -196,6 +200,7 @@ export default function IncludeExcludeFilter({ onChange }) {
 				options={filteredOptions}
 				isMulti
 				styles={customStyles}
+				hideSelectedOptions={false}
 			/>
 		</div>
 	);

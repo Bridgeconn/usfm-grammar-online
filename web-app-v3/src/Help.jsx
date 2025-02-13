@@ -48,10 +48,10 @@ export default function Help() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <div className="hero min-h-60 bg-base-200">
                     <div className="hero-content text-center">
-                      <div className="max-w-md">
+                      <div className="max-w-xl">
                         <h3 className="mb-5 text-5xl font-bold">Help Guide</h3>
                         <div className="overflow-y-auto max-h-[50vh] text-sm sm:text-base text-justify p-2">
                           <p className="mb-4">
