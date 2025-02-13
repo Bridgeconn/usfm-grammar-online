@@ -37,7 +37,91 @@ export default function MainPage() {
   const [status, setStatus] = useState("");
   const [openLeft, setOpenLeft] = useState(false);
   const [result, setResult] = useState(null);
+  const workerRef = useRef(null);
+  const initTimeoutRef = useRef(null);
+  const [workerInitialized, setWorkerInitialized] = useState(false);
 
+  // Initialize worker when component mounts
+  useEffect(() => {
+    const initializeWorker = () => {
+      try {
+        // Create new worker
+        workerRef.current = new Worker(
+          new URL("./usfmWorker.js", import.meta.url),
+          {
+            type: "module",
+          }
+        );
+
+        // Set up message handler
+        workerRef.current.onmessage = (e) => {
+          if (e.data.type === "initialized") {
+            setWorkerInitialized(true);
+            if (initTimeoutRef.current) {
+              clearTimeout(initTimeoutRef.current);
+            }
+          } else if (e.data.type === "success") {
+            setResult(e.data.data);
+            setErrorMsg("Successfully processed USFM data.");
+            setStatus("success");
+            setLoading(false);
+          } else if (e.data.type === "error") {
+            setErrorMsg(`Error processing data: ${e.data.error}`);
+            setStatus("failed");
+            setLoading(false);
+          }
+        };
+
+        // Handle worker errors
+        workerRef.current.onerror = (error) => {
+          console.error("Worker error:", error);
+          setErrorMsg(`Worker error: ${error.message}`);
+          setStatus("failed");
+          setLoading(false);
+          // Attempt to reinitialize worker on error
+          cleanupWorker();
+          initializeWorker();
+        };
+
+        // Set initialization timeout
+        initTimeoutRef.current = setTimeout(() => {
+          if (!workerInitialized) {
+            setErrorMsg("Worker initialization timeout");
+            setStatus("failed");
+            setLoading(false);
+            // Attempt to reinitialize worker on timeout
+            cleanupWorker();
+            initializeWorker();
+          }
+        }, 3000); // 3 second timeout
+      } catch (error) {
+        console.error("Worker initialization error:", error);
+        setErrorMsg(`Failed to initialize worker: ${error.message}`);
+        setStatus("failed");
+        setLoading(false)
+      }
+    };
+
+    const cleanupWorker = () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+        workerRef.current = null;
+      }
+      if (initTimeoutRef.current) {
+        clearTimeout(initTimeoutRef.current);
+        initTimeoutRef.current = null;
+      }
+      setWorkerInitialized(false);
+    };
+
+    // Initial worker setup
+    initializeWorker();
+
+    // Cleanup on unmount
+    return () => {
+      cleanupWorker();
+    };
+  }, []);
   const onCopy = useCallback(() => {
     setCopied(true);
   }, []);
@@ -181,56 +265,21 @@ export default function MainPage() {
       const include = filterType === "include_markers" ? queryParams : [];
       const exclude = filterType === "exclude_markers" ? queryParams : [];
 
-      // Create worker with module type
-      const worker = new Worker(new URL("./usfmWorker.js", import.meta.url), {
-        type: "module",
+      if (!workerRef.current) {
+        throw new Error("Worker not initialized");
+      }
+
+      workerRef.current.postMessage({
+        input: inputString,
+        informat: input,
+        outFormat: tabName,
+        exclude,
+        include,
       });
-
-      //handle worker messages
-      const result = await new Promise((resolve, reject) => {
-        let initialized = false;
-
-        worker.onmessage = (e) => {
-          if (e.data.type === "initialized") {
-            initialized = true;
-            worker.postMessage({
-              input: inputString,
-              informat: input,
-              outFormat: tabName,
-              exclude,
-              include,
-            });
-          } else if (e.data.type === "success") {
-            resolve(e.data.data);
-          } else if (e.data.type === "error") {
-            reject(new Error(e.data.error));
-          }
-        };
-
-        worker.onerror = (error) => {
-          reject(error);
-        };
-
-        // Set initialization timeout
-        setTimeout(() => {
-          if (!initialized) {
-            reject(new Error("Worker initialization timeout"));
-          }
-        }, 2000);
-      });
-
-      // Cleanup worker
-      worker.terminate();
-
-      setResult(result);
-
-      setErrorMsg("Successfully processed USFM data.");
-      setStatus("success");
     } catch (error) {
       setErrorMsg(`Error processing data: ${error.message}`);
       setStatus("failed");
-    } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
@@ -244,7 +293,7 @@ export default function MainPage() {
       setFileContentOnRight(
         tabName === "USJ" ? JSON.stringify(result, null, 2) : result
       );
-      
+
       setResult(null);
     }
   }, [result, targetFileFormat.name]);
@@ -400,11 +449,11 @@ export default function MainPage() {
                               classNames(
                                 "w-72 p-1 rounded-full lg:py-2 text-sm font-medium leading-5",
                                 "ring-white/30 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
-                                selectedIndex === null 
-                                ? "text-blue-100 bg-sky-600 hover:bg-blue-600/[0.20] hover:text-white"
-                                : selected
-                                ? "bg-white text-blue-700 shadow"
-                                : "text-blue-100 hover:bg-blue-600/[0.20] hover:text-white bg-sky-600"
+                                selectedIndex === null
+                                  ? "text-blue-100 bg-sky-600 hover:bg-blue-600/[0.20] hover:text-white"
+                                  : selected
+                                  ? "bg-white text-blue-700 shadow"
+                                  : "text-blue-100 hover:bg-blue-600/[0.20] hover:text-white bg-sky-600"
                               )
                             }
                             onClick={() => {
